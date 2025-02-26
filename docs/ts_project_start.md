@@ -214,7 +214,7 @@ Here’s a **quick and efficient** setup:
 
 ---
 
-## **1️⃣ Initialize the Project**
+### **1️⃣ Initialize the Project**
 Run the following in your terminal:
 
 ```sh
@@ -226,7 +226,7 @@ This creates a `package.json` file.
 
 ---
 
-## **2️⃣ Install Dependencies**
+### **2️⃣ Install Dependencies**
 Run:
 
 ```sh
@@ -241,7 +241,7 @@ npm install -D typescript ts-node jest @types/jest vite
 
 ---
 
-## **3️⃣ Configure TypeScript**
+### **3️⃣ Configure TypeScript**
 Generate a `tsconfig.json`:
 
 ```sh
@@ -266,12 +266,15 @@ Modify `tsconfig.json` to ensure compatibility:
 
 ---
 
-## **4️⃣ Create Project Structure**
+### **4️⃣ Create Project Structure**
 Run:
 
 ```sh
 mkdir src tests client
-touch src/index.ts tests/index.test.ts client/index.html client/main.ts
+New-Item src/index.ts -ItemType File
+New-Item tests/index.test.ts -ItemType File
+New-Item client/index.html -ItemType File
+New-Item client/main.ts -ItemType File
 ```
 
 Your folder structure should look like this:
@@ -292,7 +295,7 @@ my-ts-project
 
 ---
 
-## **5️⃣ Write Your Library Code (`src/index.ts`)**
+### **5️⃣ Write Your Library Code (`src/index.ts`)**
 Example function:
 
 ```ts
@@ -303,7 +306,7 @@ export function greet(name: string): string {
 
 ---
 
-## **6️⃣ Write Tests (`tests/index.test.ts`)**
+### **6️⃣ Write Tests (`tests/index.test.ts`)**
 Basic Jest test:
 
 ```ts
@@ -322,8 +325,8 @@ npx jest
 
 ---
 
-## **7️⃣ Setup Client for Browser Testing**
-### **HTML File (`client/index.html`):**
+### **7️⃣ Setup Client for Browser Testing**
+#### **HTML File (`client/index.html`):**
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -338,7 +341,7 @@ npx jest
 </html>
 ```
 
-### **Client Script (`client/main.ts`):**
+#### **Client Script (`client/main.ts`):**
 ```ts
 import { greet } from "../src/index";
 
@@ -347,7 +350,7 @@ console.log(greet("World")); // Check the browser console
 
 ---
 
-## **8️⃣ Start the Browser Test Environment**
+### **8️⃣ Start the Browser Test Environment**
 Modify `package.json`:
 
 ```json
@@ -368,10 +371,34 @@ Now open your browser, check the console (`F12` or `Ctrl+Shift+I`), and see the 
 
 ---
 
-## **🎉 Done!**
+### **🎉 Done!**
 Now you have:
 - A **library** (`src/index.ts`)
 - **Tests** (`tests/index.test.ts`)
 - A **client** to test in the browser (`client/`)
 
 Let me know if you need any tweaks! 🚀
+
+## Fixes needed to chatgpt version, jest.
+
+```sh
+npm install --save-dev jest ts-jest @types/jest
+```
+
+jest.config.js
+
+```js
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  transform: {
+    "^.+\\.ts$": "ts-jest",
+  },
+  extensionsToTreatAsEsm: [".ts"],
+};
+```
+
+```sh
+npx jest
+```
