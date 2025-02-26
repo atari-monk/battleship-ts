@@ -18,10 +18,22 @@
 - minutes: 23
 - commit: Initialize TypeScript project with basic structure and configuration
 
+3. Fix project structure. 
+- minutes estimate: 20
+- time: 15:20 - 16:00
+- minutes: 40
+- commit: Refactor project structure
+
+4. Class BattleshipGrid responsible for grid data and all its methods. Print in console.
+- minutes estimate: 30
+- time:
+- minutes:
+- commit:
+
 ---
 
 x.
-- estimate:
+- minutes estimate:
 - time:
 - minutes:
 - commit:
