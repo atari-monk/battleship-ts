@@ -26,9 +26,9 @@
 
 4. Class BattleshipGrid responsible for grid data and all its methods. Print in console.
 - minutes estimate: 30
-- time:
-- minutes:
-- commit:
+- time: 17:13 - 17:46
+- minutes: 33
+- commit: Implement BattleshipGrid class and associated GridCell interface; add tests for BattleshipGrid
 
 ---
 
