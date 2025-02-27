@@ -24,11 +24,20 @@
 - minutes: 40
 - commit: Refactor project structure
 
-4. Class BattleshipGrid responsible for grid data and all its methods. Print in console.
+4. Class BattleshipGrid responsible for grid data and its methods.
 - minutes estimate: 30
 - time: 17:13 - 17:46
 - minutes: 33
 - commit: Implement BattleshipGrid class and associated GridCell interface; add tests for BattleshipGrid
+
+#### 27
+
+5. Print battleship grid in browser client console. Add A5, G5... labels. Add hit method and tests.
+   Introduce column labels.
+- minutes estimate: 20
+- time: 09:22 - 10:00
+- minutes: 38
+- commit: Enhance BattleshipGrid functionality: add hitCell method, improve toString output with column labels, and update tests accordingly
 
 ---
 

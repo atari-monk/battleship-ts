@@ -1,3 +1,11 @@
-import { greet } from '../libs/battleship/index'
+import { BattleshipGrid } from '../libs/battleship'
 
-console.log(greet('World'))
+const grid = new BattleshipGrid()
+
+console.log(grid.toString())
+
+grid.hitCell('B3')
+grid.hitCell('A1')
+grid.hitCell('J10')
+
+console.log(grid.toString())
