@@ -32,13 +32,18 @@
 
 #### 27
 
-5. Print battleship grid in browser client console. Add A5, G5... labels. Add hit method and tests.
+1. Print battleship grid in browser client console. Add A5, G5... labels. Add hit method and tests.  
    Introduce column labels.
 - minutes estimate: 20
 - time: 09:22 - 10:00
 - minutes: 38
 - commit: Enhance BattleshipGrid functionality: add hitCell method, improve toString output with column labels, and update tests accordingly
 
+2. Methods to place fleet randomly.
+- minutes estimate: 30
+- time: 
+- minutes:
+- commit:
 ---
 
 x.
