@@ -2,7 +2,7 @@
 
 For simple typescript project where i want a library with code, tests, and client to test it in browser console.
 
-## [Source](https://chatgpt.com/)
+## Init
 
 If you want to set up a simple TypeScript project quickly with:  
 
