@@ -50,6 +50,12 @@ export class BattleshipGrid {
     return columnLabels + '\n' + gridRows
   }
 
+  public isGameOver(): boolean {
+    return this._grid.every((row) =>
+      row.every((cell) => cell.shipId === undefined || cell.isHit)
+    )
+  }
+
   public labelToIndex(label: string): { row: number; col: number } | null {
     const match = label.match(/^([A-J])(\d{1,2})$/i)
     if (!match) return null

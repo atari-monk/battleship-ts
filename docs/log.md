@@ -87,6 +87,14 @@
 - commit: Add player configuration and game state management; implement grid generation and attack logic
 - moral: Step 3. Typed Data control simple functions that works. 
 
+5. Make game playable.
+
+- minutes estimate: 30
+- time: 19:24 - 20:28
+- minutes: 64
+- commit: Refactor player configuration to use PLAYER enum; add player names and toggle player turns in game loop
+- moral: Background audio is double edge sword. Keeps you in the game but distracts also when attention is switched there, mostly when task is lost.
+
 ---
 
 x.

@@ -6,7 +6,8 @@ enum PLAYER {
 }
 
 interface PlayerConfig {
-  role: string
+  role: PLAYER
+  name: string
   style: string
   grid: BattleshipGrid
   hideShips: boolean
@@ -29,46 +30,64 @@ function generateGrid() {
 const config: GameConfig = { players: new Map<PLAYER, PlayerConfig>() }
 
 config.players.set(PLAYER.PLAYER1, {
-  role: 'Player1',
+  role: PLAYER.PLAYER1,
+  name: 'Player 1',
   style: style('lightblue'),
   grid: generateGrid(),
-  hideShips: false,
+  hideShips: true,
 })
 
 config.players.set(PLAYER.PLAYER2, {
-  role: 'Player2',
+  role: PLAYER.PLAYER2,
+  name: 'Player 2',
   style: style('red'),
   grid: generateGrid(),
   hideShips: true,
 })
 
 function printGameState() {
+  console.clear()
   config.players.forEach((player) => {
     printPlayer(player)
   })
 }
 
 function printPlayer(config: PlayerConfig) {
-  const { role, style, grid, hideShips } = config
-  console.log(`%c${role}`, style)
+  const { name, style, grid, hideShips } = config
+  console.log(`%c${name}`, style)
   console.log(`%c${grid.toString(hideShips)}\n`, style)
 }
 
 function attack(attacker: PlayerConfig, defender: PlayerConfig) {
-  const { role } = attacker
+  const { name } = attacker
   const { grid } = defender
-  const input = prompt(`${role}: Enter label (eg. A2):`)!
+  const input = prompt(`${name}: Enter label (eg. A2):`)!
   grid.hitCell(input)
+  printGameState()
+  return grid.isGameOver()
 }
 
 printGameState()
 
-const player1 = config.players.get(PLAYER.PLAYER1)
-const player2 = config.players.get(PLAYER.PLAYER2)
+const player1 = config.players.get(PLAYER.PLAYER1)!
+const player2 = config.players.get(PLAYER.PLAYER2)!
 if (!player1 || !player2) throw new Error('Missing Player')
+let isGameOver = false
 
-attack(player1, player2)
+let attacker = player1
+let defender = player2
 
-console.clear()
+function tooglePlayers() {
+  const temp = defender
+  defender = attacker
+  attacker = temp
+}
 
-printGameState()
+while (!isGameOver) {
+  isGameOver = attack(attacker, defender)
+  if (isGameOver) {
+    console.log('Game over! All ships have been sunk.')
+    break
+  }
+  tooglePlayers()
+}
