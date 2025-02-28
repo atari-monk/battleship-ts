@@ -51,6 +51,24 @@
 - minutes: 53
 - commit: Refactor BattleshipGrid: encapsulate grid property, implement placeFleet method, and enhance hitCell logic; update tests for fleet placement and ship spacing
 
+#### 28
+
+1. Make game playable by adding new classes.
+
+- minutes estimate: 30
+- time: 11:27 - 12:47
+- minutes: 80
+- commit: Add styling to index.html for improved readability with dark theme
+- note: Fail. Do not trust or belive LLM AI. Do small change, test. Big change that looks good, tested late, equals fail and waste of time.
+
+2. Make game playable by adding new classes.
+
+- minutes estimate: 30
+- time: 12:48 - 
+- minutes:
+- commit:
+- note: (optional)
+
 ---
 
 x.
@@ -59,3 +77,4 @@ x.
 - time:
 - minutes:
 - commit:
+- note: (optional)
