@@ -59,15 +59,16 @@
 - time: 11:27 - 12:47
 - minutes: 80
 - commit: Add styling to index.html for improved readability with dark theme
-- note: Fail. Do not trust or belive LLM AI. Do small change, test. Big change that looks good, tested late, equals fail and waste of time.
+- note: Fail. Do not trust or belive LLM AI. Do small change, test. Big change that looks good, tested late, equals fail and waste of time.  
+  In fact to be safe note evry step.
 
 2. Make game playable by adding new classes.
 
 - minutes estimate: 30
-- time: 12:48 - 
-- minutes:
-- commit:
-- note: (optional)
+- time: 12:48 - 13:18
+- minutes: 30
+- commit: Add tests for BattleshipGrid constructor, hitCell, toString, and fleet placement functionality
+- note: Mannually defined what has to happen with api generated. Split tests to SRP to be more functional.
 
 ---
 
