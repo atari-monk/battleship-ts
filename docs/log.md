@@ -79,6 +79,14 @@
 - commit: Implement player configuration and enhance game state display; update BattleshipGrid.toString to support hiding ships
 - moral: Step 2. Write simple functions driven by config data at least at first.
 
+4. Make game playable.
+
+- minutes estimate: 30
+- time: 17:03 - 17:38
+- minutes: 35
+- commit: Add player configuration and game state management; implement grid generation and attack logic
+- moral: Step 3. Typed Data control simple functions that works. 
+
 ---
 
 x.

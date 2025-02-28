@@ -1,63 +1,74 @@
 import { BattleshipGrid } from '../libs/battleship'
 
-const grid1 = new BattleshipGrid()
-grid1.placeFleet()
-
-const grid2 = new BattleshipGrid()
-grid2.placeFleet()
-
-const player1Config = {
-  role: 'Player1',
-  style: style('lightblue'),
-  grid: grid1,
-  hideShips: false,
+enum PLAYER {
+  PLAYER1,
+  PLAYER2,
 }
 
-const player2Config = {
-  role: 'Player2',
-  style: style('red'),
-  grid: grid2,
-  hideShips: true,
+interface PlayerConfig {
+  role: string
+  style: string
+  grid: BattleshipGrid
+  hideShips: boolean
 }
 
-printGameState()
-// console.log(
-//   `%cPlayer2`,
-//   'color: red; background-color: black; font-size: 20px; font-weight: bold'
-// )
-// console.log(
-//   `%c${grid2.toString(true)}\n`,
-//   'color: red; background-color: black; font-size: 20px; font-weight: bold'
-// )
-
-//const userInput = prompt('Player1: Enter label (eg. A2):') ?? 'Default Value'
-
-//grid2.hitCell(userInput)
-
-//console.clear()
-
-// grid2.hitCell('A2')
-// grid1.hitCell('J10')
-// grid2.hitCell('A5')
-
-// console.log(grid1.toString())
-
-function attack(playerConfig) {
-  const { role, style, grid } = playerConfig
-  const userInput = prompt(`${role}: Enter label (eg. A2):`)
+interface GameConfig {
+  players: Map<PLAYER, PlayerConfig>
 }
 
 function style(color: string) {
   return `color: ${color}; background-color: black; font-size: 20px; font-weight: bold')`
 }
 
-function printGameState() {
-  printPlayer(player1Config)
-  printPlayer(player2Config)
+function generateGrid() {
+  const grid = new BattleshipGrid()
+  grid.placeFleet()
+  return grid
 }
 
-function printPlayer(playerConfig) {
-  const { role, style, grid, hideShips } = playerConfig
+const config: GameConfig = { players: new Map<PLAYER, PlayerConfig>() }
+
+config.players.set(PLAYER.PLAYER1, {
+  role: 'Player1',
+  style: style('lightblue'),
+  grid: generateGrid(),
+  hideShips: false,
+})
+
+config.players.set(PLAYER.PLAYER2, {
+  role: 'Player2',
+  style: style('red'),
+  grid: generateGrid(),
+  hideShips: true,
+})
+
+function printGameState() {
+  config.players.forEach((player) => {
+    printPlayer(player)
+  })
+}
+
+function printPlayer(config: PlayerConfig) {
+  const { role, style, grid, hideShips } = config
   console.log(`%c${role}`, style)
   console.log(`%c${grid.toString(hideShips)}\n`, style)
 }
+
+function attack(attacker: PlayerConfig, defender: PlayerConfig) {
+  const { role } = attacker
+  const { grid } = defender
+  const input = prompt(`${role}: Enter label (eg. A2):`)!
+  grid.hitCell(input)
+}
+
+printGameState()
+
+const player1 = config.players.get(PLAYER.PLAYER1)
+const player2 = config.players.get(PLAYER.PLAYER2)
+if (!player1 || !player2) throw new Error('Missing Player')
+
+attack(player1, player2)
+
+console.clear()
+
+printGameState()
