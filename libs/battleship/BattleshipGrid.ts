@@ -19,7 +19,7 @@ export class BattleshipGrid {
     this._grid = this.generateGrid()
   }
 
-  public toString(): string {
+  public toString(hideShips = false): string {
     const columnLabels =
       '   ' +
       Array.from({ length: this.cols }, (_, i) =>
@@ -38,7 +38,9 @@ export class BattleshipGrid {
                   ? 'X'
                   : 'O'
                 : cell.shipId !== undefined
-                ? this.shipTypes[cell.shipId] || '?'
+                ? hideShips
+                  ? '-'
+                  : this.shipTypes[cell.shipId] || '?'
                 : '-'
             )
             .join(' ')

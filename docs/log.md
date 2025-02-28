@@ -69,6 +69,15 @@
 - minutes: 30
 - commit: Add tests for BattleshipGrid constructor, hitCell, toString, and fleet placement functionality
 - note: Mannually defined what has to happen with api generated. Split tests to SRP to be more functional.
+- moral: Step 1. Write your api calls and see what works.
+
+3. Make game playable.
+
+- minutes estimate: 30
+- time: 15:37 - 16:20
+- minutes: 43
+- commit: Implement player configuration and enhance game state display; update BattleshipGrid.toString to support hiding ships
+- moral: Step 2. Write simple functions driven by config data at least at first.
 
 ---
 
@@ -79,3 +88,4 @@ x.
 - minutes:
 - commit:
 - note: (optional)
+- moral: (optional), theory, test, result and reflection
