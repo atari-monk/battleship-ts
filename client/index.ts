@@ -59,9 +59,11 @@ function printPlayer(config: PlayerConfig) {
 }
 
 function attack(attacker: PlayerConfig, defender: PlayerConfig) {
-  const { name } = attacker
-  const { grid } = defender
-  const input = prompt(`${name}: Enter label (eg. A2):`)!
+  const { name: attackerName } = attacker
+  const { grid, name: defenderName } = defender
+  const input = prompt(
+    `${attackerName} attacks ${defenderName}. Enter label (eg. A2):`
+  )!
   grid.hitCell(input)
   printGameState()
   return grid.isGameOver()
