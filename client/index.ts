@@ -1,5 +1,10 @@
 import { BattleshipGrid } from '../libs/battleship'
 
+enum PLAYER_TYPE {
+  HUMAN,
+  AI,
+}
+
 enum PLAYER {
   PLAYER1,
   PLAYER2,
@@ -7,18 +12,25 @@ enum PLAYER {
 
 interface PlayerConfig {
   role: PLAYER
+  type: PLAYER_TYPE
   name: string
   style: string
   grid: BattleshipGrid
   hideShips: boolean
 }
 
+enum GAME_MODE {
+  TWO_PLAYER,
+  PLAYER_VS_AI,
+}
+
 interface GameConfig {
+  mode: GAME_MODE
   players: Map<PLAYER, PlayerConfig>
 }
 
 function style(color: string) {
-  return `color: ${color}; background-color: black; font-size: 20px; font-weight: bold')`
+  return `color: ${color}; background-color: black; font-size: 20px; font-weight: bold;`
 }
 
 function generateGrid() {
@@ -27,10 +39,14 @@ function generateGrid() {
   return grid
 }
 
-const config: GameConfig = { players: new Map<PLAYER, PlayerConfig>() }
+const config: GameConfig = {
+  mode: GAME_MODE.TWO_PLAYER,
+  players: new Map<PLAYER, PlayerConfig>(),
+}
 
 config.players.set(PLAYER.PLAYER1, {
   role: PLAYER.PLAYER1,
+  type: PLAYER_TYPE.HUMAN,
   name: 'Player 1',
   style: style('lightblue'),
   grid: generateGrid(),
@@ -39,6 +55,7 @@ config.players.set(PLAYER.PLAYER1, {
 
 config.players.set(PLAYER.PLAYER2, {
   role: PLAYER.PLAYER2,
+  type: PLAYER_TYPE.HUMAN,
   name: 'Player 2',
   style: style('red'),
   grid: generateGrid(),
@@ -66,7 +83,7 @@ function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   while (!validMove) {
     const input = prompt(attackerName)!
     validMove = grid.hitCell(input)
-    if (!validMove) console.log(`%cThis cell is alrady hit. Try again.`, style)
+    if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)
   }
 
   printGameState()
