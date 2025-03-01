@@ -23,4 +23,17 @@ describe('BattleshipGrid hitCell', () => {
     expect(grid.hitCell('5B')).toBe(false)
     expect(grid.hitCell('')).toBe(false)
   })
+
+  test('hitCell should return false if the same cell is hit twice', () => {
+    const grid = new BattleshipGrid()
+
+    expect(grid.hitCell('B2')).toBe(true)
+    expect(grid.hitCell('B2')).toBe(false)
+
+    expect(grid.hitCell('E5')).toBe(true)
+    expect(grid.hitCell('E5')).toBe(false)
+
+    expect(grid.hitCell('H7')).toBe(true)
+    expect(grid.hitCell('H7')).toBe(false)
+  })
 })

@@ -61,10 +61,14 @@ function printPlayer(config: PlayerConfig) {
 function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { name: attackerName } = attacker
   const { grid, name: defenderName } = defender
-  const input = prompt(
-    `${attackerName} attacks ${defenderName}. Enter label (eg. A2):`
-  )!
-  grid.hitCell(input)
+
+  let validMove = false
+  while (!validMove) {
+    const input = prompt(attackerName)!
+    validMove = grid.hitCell(input)
+    if (!validMove) console.log(`%cThis cell is alrady hit. Try again.`, style)
+  }
+
   printGameState()
   return grid.isGameOver()
 }

@@ -73,6 +73,11 @@ export class BattleshipGrid {
     if (!position) return false
 
     const { row, col } = position
+
+    if (this._grid[row][col].isHit) {
+      return false
+    }
+
     this._grid[row][col].isHit = true
     return true
   }
