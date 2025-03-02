@@ -27,6 +27,7 @@ enum GAME_MODE {
 interface GameConfig {
   mode: GAME_MODE
   players: Map<PLAYER, PlayerConfig>
+  clearConsole: boolean
 }
 
 function style(color: string) {
@@ -40,6 +41,7 @@ function generateGrid() {
 }
 
 const config: GameConfig = {
+  clearConsole: true,
   mode: GAME_MODE.PLAYER_VS_AI,
   players: new Map<PLAYER, PlayerConfig>([
     [
@@ -68,7 +70,7 @@ const config: GameConfig = {
 }
 
 function printGameState() {
-  console.clear()
+  if (config.clearConsole) console.clear()
   config.players.forEach((player) => {
     printPlayer(player)
   })
@@ -90,7 +92,8 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
     if (attacker.type === PLAYER_TYPE.HUMAN) {
       input = await getInputFromConsole(attackerName)
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      input = defender.grid.aiRandomNotTriedCell()
+      input = defender.grid.aiRandomNotTriedCell()!
+      console.log(`AI move: ${input}`)
     }
     validMove = grid.hitCell(input)
     if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)

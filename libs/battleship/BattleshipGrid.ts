@@ -70,6 +70,15 @@ export class BattleshipGrid {
       : null
   }
 
+  public indexToLabel(row: number, col: number): string | null {
+    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return null
+
+    const letter = String.fromCharCode(col + 65)
+    const number = row + 1
+
+    return `${letter}${number}`
+  }
+
   public hitCell(label: string): boolean {
     const position = this.labelToIndex(label)
     if (!position) return false
