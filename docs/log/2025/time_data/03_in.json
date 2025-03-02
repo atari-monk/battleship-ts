@@ -20,7 +20,8 @@
       { "estimate": 20, "start": "22:49", "end": "23:06" },
       { "estimate": 60, "start": "23:07", "end": "00:05" },
       { "estimate": 20, "start": "00:06", "end": "00:20" },
-      { "estimate": 5, "start": "00:21", "end": "00:26" }
+      { "estimate": 5, "start": "00:21", "end": "00:26" },
+      { "estimate": 20, "start": "00:27", "end": "00:42" }
     ]
   },
   {
