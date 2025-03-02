@@ -85,7 +85,7 @@ function attack(attacker: PlayerConfig, defender: PlayerConfig) {
     if (attacker.type === PLAYER_TYPE.HUMAN) {
       input = prompt(attackerName)!
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      input = 'A1'
+      input = defender.grid.aiRandomNotTriedCell()
     }
     validMove = grid.hitCell(input)
     if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)

@@ -2,6 +2,7 @@ import { GridCell } from './GridCell'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
+  private _aiHits
 
   private shipTypes: { [key: number]: string } = {
     1: 'C',
@@ -17,6 +18,7 @@ export class BattleshipGrid {
 
   constructor(public rows: number = 10, public cols: number = 10) {
     this._grid = this.generateGrid()
+    this._aiHits = new Set()
   }
 
   public toString(hideShips = false): string {
@@ -191,5 +193,22 @@ export class BattleshipGrid {
         this._grid[row + i][col].shipId = shipId
       }
     }
+  }
+
+  private getRandomCell(): string {
+    const letters = 'ABCDEFGHIJ'
+    const numbers = '12345678910'
+    const letter = letters[Math.floor(Math.random() * letters.length)]
+    const number = numbers[Math.floor(Math.random() * numbers.length)]
+    return letter + number
+  }
+
+  public aiRandomNotTriedCell(): string {
+    let hit = this.getRandomCell()
+    while (!this._aiHits.has(hit)) {
+      this._aiHits.add(hit)
+      return hit
+    }
+    return ''
   }
 }
