@@ -1,0 +1,28 @@
+[
+  {
+    "day": "2025-02-26",
+    "time": [
+      { "estimate": 20, "start": "11:06", "end": "11:26" },
+      { "estimate": 20, "start": "11:33", "end": "11:56" },
+      { "estimate": 20, "start": "15:20", "end": "16:00" },
+      { "estimate": 30, "start": "17:13", "end": "17:46" }
+    ]
+  },
+  {
+    "day": "2025-02-27",
+    "time": [
+      { "estimate": 20, "start": "09:22", "end": "10:00" },
+      { "estimate": 30, "start": "14:14", "end": "15:07" }
+    ]
+  },
+  {
+    "day": "2025-02-28",
+    "time": [
+      { "estimate": 30, "start": "11:27", "end": "12:47" },
+      { "estimate": 30, "start": "12:48", "end": "13:18" },
+      { "estimate": 30, "start": "15:37", "end": "16:20" },
+      { "estimate": 30, "start": "17:03", "end": "17:38" },
+      { "estimate": 30, "start": "19:24", "end": "20:28" }
+    ]
+  }
+]
