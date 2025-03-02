@@ -54,7 +54,7 @@ def process_file(day_nr):
     except FileNotFoundError:
         print(f"Error: The file {input_filename} does not exist.")
 
-# Input from the user for day number
-day_nr = input("Please enter the day number (e.g., 1, 2, 3): ")
+# Get the current month with leading zero if necessary
+current_month = datetime.now().strftime("%m")
 
-process_file(day_nr)
+process_file(current_month)
