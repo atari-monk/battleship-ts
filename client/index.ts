@@ -10,6 +10,11 @@ enum PLAYER {
   PLAYER2,
 }
 
+enum FLEET_TYPE {
+  STATIC,
+  RANDOM,
+}
+
 interface PlayerConfig {
   role: PLAYER
   type: PLAYER_TYPE
@@ -34,24 +39,34 @@ function style(color: string) {
   return `color: ${color}; background-color: black; font-size: 20px; font-weight: bold;`
 }
 
-function generateGrid() {
+function generateGrid(fleetType: FLEET_TYPE) {
   const grid = new BattleshipGrid()
-  grid.placeFleet()
+  switch (fleetType) {
+    case FLEET_TYPE.RANDOM:
+      grid.placeFleet()
+      break
+    case FLEET_TYPE.STATIC:
+      grid.placeShipsFromArray()
+      break
+    default:
+      grid.placeFleet()
+      break
+  }
   return grid
 }
 
 const config: GameConfig = {
-  clearConsole: true,
+  clearConsole: false,
   mode: GAME_MODE.PLAYER_VS_AI,
   players: new Map<PLAYER, PlayerConfig>([
     [
       PLAYER.PLAYER2,
       {
         role: PLAYER.PLAYER2,
-        type: PLAYER_TYPE.HUMAN,
+        type: PLAYER_TYPE.AI,
         name: 'Player 2',
         style: style('red'),
-        grid: generateGrid(),
+        grid: generateGrid(FLEET_TYPE.RANDOM),
         hideShips: true,
       },
     ],
@@ -62,8 +77,8 @@ const config: GameConfig = {
         type: PLAYER_TYPE.HUMAN,
         name: 'Player 1',
         style: style('lightblue'),
-        grid: generateGrid(),
-        hideShips: true,
+        grid: generateGrid(FLEET_TYPE.STATIC),
+        hideShips: false,
       },
     ],
   ]),
@@ -91,11 +106,16 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
     let input: string = ''
     if (attacker.type === PLAYER_TYPE.HUMAN) {
       input = await getInputFromConsole(attackerName)
+      validMove = grid.hitCell(input)
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      input = defender.grid.aiRandomNotTriedCell()!
-      console.log(`AI move: ${input}`)
+      input = grid.aiMove({
+        minLetter: 'C',
+        maxLetter: 'H',
+        minNumber: 5,
+        maxNumber: 5,
+      })
+      validMove = grid.hitCell(input, true)
     }
-    validMove = grid.hitCell(input)
     if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)
   }
 
@@ -117,9 +137,6 @@ function tooglePlayers(attacker: PlayerConfig, defender: PlayerConfig) {
 }
 
 async function startGame() {
-  if (config.mode === GAME_MODE.PLAYER_VS_AI) {
-    config.players.get(PLAYER.PLAYER2)!.type = PLAYER_TYPE.AI
-  }
   const player1 = config.players.get(PLAYER.PLAYER1)!
   const player2 = config.players.get(PLAYER.PLAYER2)!
   if (!player1 || !player2) throw new Error('Missing Player')
