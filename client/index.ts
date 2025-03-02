@@ -41,26 +41,31 @@ function generateGrid() {
 
 const config: GameConfig = {
   mode: GAME_MODE.PLAYER_VS_AI,
-  players: new Map<PLAYER, PlayerConfig>(),
+  players: new Map<PLAYER, PlayerConfig>([
+    [
+      PLAYER.PLAYER2,
+      {
+        role: PLAYER.PLAYER2,
+        type: PLAYER_TYPE.HUMAN,
+        name: 'Player 2',
+        style: style('red'),
+        grid: generateGrid(),
+        hideShips: true,
+      },
+    ],
+    [
+      PLAYER.PLAYER1,
+      {
+        role: PLAYER.PLAYER1,
+        type: PLAYER_TYPE.HUMAN,
+        name: 'Player 1',
+        style: style('lightblue'),
+        grid: generateGrid(),
+        hideShips: true,
+      },
+    ],
+  ]),
 }
-
-config.players.set(PLAYER.PLAYER1, {
-  role: PLAYER.PLAYER1,
-  type: PLAYER_TYPE.HUMAN,
-  name: 'Player 1',
-  style: style('lightblue'),
-  grid: generateGrid(),
-  hideShips: true,
-})
-
-config.players.set(PLAYER.PLAYER2, {
-  role: PLAYER.PLAYER2,
-  type: PLAYER_TYPE.HUMAN,
-  name: 'Player 2',
-  style: style('red'),
-  grid: generateGrid(),
-  hideShips: true,
-})
 
 function printGameState() {
   console.clear()
@@ -104,31 +109,31 @@ function getInputFromConsole(playerName: string): Promise<string> {
   })
 }
 
-function tooglePlayers() {
-  const temp = defender
-  defender = attacker
-  attacker = temp
+function tooglePlayers(attacker: PlayerConfig, defender: PlayerConfig) {
+  return [defender, attacker]
 }
 
-if (config.mode === GAME_MODE.PLAYER_VS_AI) {
-  config.players.get(PLAYER.PLAYER2)!.type = PLAYER_TYPE.AI
+async function startGame() {
+  if (config.mode === GAME_MODE.PLAYER_VS_AI) {
+    config.players.get(PLAYER.PLAYER2)!.type = PLAYER_TYPE.AI
+  }
+  const player1 = config.players.get(PLAYER.PLAYER1)!
+  const player2 = config.players.get(PLAYER.PLAYER2)!
+  if (!player1 || !player2) throw new Error('Missing Player')
+  let isGameOver = false
+
+  let attacker = player1
+  let defender = player2
+
+  while (!isGameOver) {
+    isGameOver = await attack(attacker, defender)
+    if (isGameOver) {
+      console.log('Game over! All ships have been sunk.')
+      break
+    }
+    ;[attacker, defender] = tooglePlayers(attacker, defender)
+  }
 }
 
 printGameState()
-
-const player1 = config.players.get(PLAYER.PLAYER1)!
-const player2 = config.players.get(PLAYER.PLAYER2)!
-if (!player1 || !player2) throw new Error('Missing Player')
-let isGameOver = false
-
-let attacker = player1
-let defender = player2
-
-while (!isGameOver) {
-  isGameOver = await attack(attacker, defender)
-  if (isGameOver) {
-    console.log('Game over! All ships have been sunk.')
-    break
-  }
-  tooglePlayers()
-}
+await startGame()
