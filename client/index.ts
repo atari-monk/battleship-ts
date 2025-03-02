@@ -40,7 +40,7 @@ function generateGrid() {
 }
 
 const config: GameConfig = {
-  mode: GAME_MODE.TWO_PLAYER,
+  mode: GAME_MODE.PLAYER_VS_AI,
   players: new Map<PLAYER, PlayerConfig>(),
 }
 
@@ -77,17 +77,32 @@ function printPlayer(config: PlayerConfig) {
 
 function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { name: attackerName } = attacker
-  const { grid, name: defenderName } = defender
+  const { grid } = defender
 
   let validMove = false
   while (!validMove) {
-    const input = prompt(attackerName)!
+    let input: string = ''
+    if (attacker.type === PLAYER_TYPE.HUMAN) {
+      input = prompt(attackerName)!
+    } else if (attacker.type === PLAYER_TYPE.AI) {
+      input = 'A1'
+    }
     validMove = grid.hitCell(input)
     if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)
   }
 
   printGameState()
   return grid.isGameOver()
+}
+
+function tooglePlayers() {
+  const temp = defender
+  defender = attacker
+  attacker = temp
+}
+
+if (config.mode === GAME_MODE.PLAYER_VS_AI) {
+  config.players.get(PLAYER.PLAYER2)!.type = PLAYER_TYPE.AI
 }
 
 printGameState()
@@ -100,14 +115,16 @@ let isGameOver = false
 let attacker = player1
 let defender = player2
 
-function tooglePlayers() {
-  const temp = defender
-  defender = attacker
-  attacker = temp
-}
-
 while (!isGameOver) {
-  isGameOver = attack(attacker, defender)
+  if (config.mode === GAME_MODE.TWO_PLAYER) {
+    isGameOver = attack(attacker, defender)
+  } else if (config.mode === GAME_MODE.PLAYER_VS_AI) {
+    if (attacker === player1) {
+      isGameOver = attack(attacker, defender)
+    } else if (attacker === player2) {
+      isGameOver = attack(attacker, defender)
+    }
+  }
   if (isGameOver) {
     console.log('Game over! All ships have been sunk.')
     break
