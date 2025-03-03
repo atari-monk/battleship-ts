@@ -1,4 +1,4 @@
-import { BattleshipAI, BattleshipGrid, HitResult } from '../libs/battleship'
+import { BattleshipAI, BattleshipGrid } from '../libs/battleship'
 
 enum PLAYER_TYPE {
   HUMAN,
@@ -59,7 +59,7 @@ const player1Grid = generateGrid(FLEET_TYPE.STATIC)
 const player2Grid = generateGrid(FLEET_TYPE.RANDOM)
 
 const config: GameConfig = {
-  clearConsole: false,
+  clearConsole: true,
   mode: GAME_MODE.PLAYER_VS_AI,
   players: new Map<PLAYER, PlayerConfig>([
     [
@@ -107,7 +107,7 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { grid } = defender
 
   let validMove = false
-  let hitResult: HitResult = { alreadyHit: false, shipHit: false }
+  let hitResult = { alreadyHit: false, shipHit: false }
 
   while (!validMove) {
     let input: string = ''
