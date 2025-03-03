@@ -22,7 +22,6 @@ interface PlayerConfig {
   style: string
   grid: BattleshipGrid
   hideShips: boolean
-  gridId: string
 }
 
 enum GAME_MODE {
@@ -34,6 +33,7 @@ interface GameConfig {
   mode: GAME_MODE
   players: Map<PLAYER, PlayerConfig>
   clearConsole: boolean
+  gridId: string
 }
 
 function style(color: string) {
@@ -60,8 +60,9 @@ const player1Grid = generateGrid(FLEET_TYPE.STATIC)
 const player2Grid = generateGrid(FLEET_TYPE.RANDOM)
 
 const config: GameConfig = {
-  clearConsole: true,
+  clearConsole: false,
   mode: GAME_MODE.PLAYER_VS_AI,
+  gridId: 'grid',
   players: new Map<PLAYER, PlayerConfig>([
     [
       PLAYER.PLAYER2,
@@ -72,7 +73,6 @@ const config: GameConfig = {
         style: style('red'),
         grid: player2Grid,
         hideShips: true,
-        gridId: 'player2Grid',
       },
     ],
     [
@@ -84,7 +84,6 @@ const config: GameConfig = {
         style: style('lightblue'),
         grid: player1Grid,
         hideShips: false,
-        gridId: 'player1Grid',
       },
     ],
   ]),
@@ -92,18 +91,23 @@ const config: GameConfig = {
 
 const ai = new BattleshipAI(player1Grid)
 
-function printGameState() {
+function printGameState(player: PLAYER, gameConfig: GameConfig) {
   if (config.clearConsole) console.clear()
-  config.players.forEach((player) => {
-    printPlayer(player)
-  })
+  printPlayer(player, gameConfig)
 }
 
-function printPlayer(config: PlayerConfig) {
-  const { name, style, grid, gridId, hideShips } = config
+function printPlayer(
+  player: PLAYER,
+  gameConfig: GameConfig,
+  inConsole = false
+) {
+  const { gridId } = gameConfig
+  const playerConfig = gameConfig.players.get(player)!
+  renderGrid(gridId, playerConfig)
+  if (!inConsole) return
+  const { name, style, grid, hideShips } = playerConfig
   console.log(`%c${name}`, style)
   console.log(`%c${grid.toString(hideShips)}\n`, style)
-  renderGrid(gridId, grid)
 }
 
 async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
@@ -117,7 +121,8 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
     let input: string = ''
 
     if (attacker.type === PLAYER_TYPE.HUMAN) {
-      input = await getInputFromConsole(attackerName)
+      //input = await getInputFromConsole(attackerName)
+      input = await handlePlayerInput(attackerName)
       hitResult = grid.hitCell(input)
     } else if (attacker.type === PLAYER_TYPE.AI) {
       hitResult = ai.aiMove({
@@ -135,9 +140,6 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
       validMove = true
     }
   }
-
-  printGameState()
-  return grid.isGameOver()
 }
 
 function getInputFromConsole(playerName: string): Promise<string> {
@@ -163,7 +165,10 @@ async function startGame() {
   let defender = player2
 
   while (!isGameOver) {
-    isGameOver = await attack(attacker, defender)
+    printGameState(defender.role, config)
+    await attack(attacker, defender)
+    isGameOver = defender.grid.isGameOver()
+    printGameState(defender.role, config)
     if (isGameOver) {
       console.log('Game over! All ships have been sunk.')
       break
@@ -172,9 +177,39 @@ async function startGame() {
   }
 }
 
-function renderGrid(gridId: string, grid: BattleshipGrid) {
-  document.getElementById(gridId)!.textContent = grid.toString()
+function renderGrid(gridId: string, playerConfig: PlayerConfig) {
+  const element = document.getElementById(gridId)!
+  element.textContent = ''
+  element.textContent = playerConfig.grid.toString(playerConfig.hideShips)
 }
 
-printGameState()
+async function getInputFromPage(playerName: string): Promise<string> {
+  return new Promise((resolve) => {
+    const inputField = document.getElementById(
+      'playerInput'
+    ) as HTMLInputElement
+    const submitButton = document.getElementById(
+      'submitInput'
+    ) as HTMLButtonElement
+    const resultDisplay = document.getElementById(
+      'inputResult'
+    ) as HTMLParagraphElement
+
+    submitButton.onclick = () => {
+      const input = inputField.value.trim()
+      if (input !== '') {
+        resultDisplay.textContent = `${playerName}: ${input}`
+        resolve(input)
+        inputField.value = ''
+      }
+    }
+  })
+}
+
+async function handlePlayerInput(playerName: string) {
+  const move = await getInputFromPage(playerName)
+  console.log('Move:', move)
+  return move
+}
+
 await startGame()

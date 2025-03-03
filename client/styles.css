@@ -1,4 +1,28 @@
 body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
   background-color: black;
+}
+
+pre {
   color: white;
+  background-color: black;
+  font-size: 50px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  user-select: none;
+}
+
+.player1Grid {
+  color: blue;
+}
+
+.player2Grid {
+  color: red;
 }
