@@ -1,4 +1,4 @@
-import { BattleshipGrid } from '../libs/battleship'
+import { BattleshipAI, BattleshipGrid, HitResult } from '../libs/battleship'
 
 enum PLAYER_TYPE {
   HUMAN,
@@ -55,6 +55,9 @@ function generateGrid(fleetType: FLEET_TYPE) {
   return grid
 }
 
+const player1Grid = generateGrid(FLEET_TYPE.STATIC)
+const player2Grid = generateGrid(FLEET_TYPE.RANDOM)
+
 const config: GameConfig = {
   clearConsole: false,
   mode: GAME_MODE.PLAYER_VS_AI,
@@ -66,7 +69,7 @@ const config: GameConfig = {
         type: PLAYER_TYPE.AI,
         name: 'Player 2',
         style: style('red'),
-        grid: generateGrid(FLEET_TYPE.RANDOM),
+        grid: player2Grid,
         hideShips: true,
       },
     ],
@@ -77,12 +80,14 @@ const config: GameConfig = {
         type: PLAYER_TYPE.HUMAN,
         name: 'Player 1',
         style: style('lightblue'),
-        grid: generateGrid(FLEET_TYPE.STATIC),
+        grid: player1Grid,
         hideShips: false,
       },
     ],
   ]),
 }
+
+const ai = new BattleshipAI(player1Grid)
 
 function printGameState() {
   if (config.clearConsole) console.clear()
@@ -102,21 +107,29 @@ async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { grid } = defender
 
   let validMove = false
+  let hitResult: HitResult = { alreadyHit: false, shipHit: false }
+
   while (!validMove) {
     let input: string = ''
+
     if (attacker.type === PLAYER_TYPE.HUMAN) {
       input = await getInputFromConsole(attackerName)
-      validMove = grid.hitCell(input)
+      hitResult = grid.hitCell(input)
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      input = grid.aiMove({
+      hitResult = ai.aiMove({
         minLetter: 'C',
         maxLetter: 'H',
         minNumber: 5,
         maxNumber: 5,
       })
-      validMove = grid.hitCell(input, true)
     }
-    if (!validMove) console.log(`%cThis cell is already hit. Try again.`, style)
+
+    const { alreadyHit } = hitResult
+    if (alreadyHit) {
+      console.log(`%cThis cell was already hit. Try again.`, style)
+    } else {
+      validMove = true
+    }
   }
 
   printGameState()

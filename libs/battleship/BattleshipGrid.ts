@@ -1,10 +1,8 @@
 import { GridCell } from './GridCell'
-import { Range } from './Range'
+import { HitResult } from './HitResult'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
-  private _aiShots
-  private _aiHits
 
   private shipTypes: { [key: number]: string } = {
     1: 'C',
@@ -20,8 +18,6 @@ export class BattleshipGrid {
 
   constructor(public rows: number = 10, public cols: number = 10) {
     this._grid = this.generateGrid()
-    this._aiShots = new Set()
-    this._aiHits = new Set()
   }
 
   public toString(hideShips = false): string {
@@ -82,23 +78,22 @@ export class BattleshipGrid {
     return `${letter}${number}`
   }
 
-  public hitCell(label: string, isAI: boolean = false): boolean {
+  public hitCell(label: string): HitResult {
     const position = this.labelToIndex(label)
     if (!position) throw new Error('labelToIndex fail')
 
     const { row, col } = position
 
     if (this._grid[row][col].isHit) {
-      return false
+      return { alreadyHit: true, shipHit: false }
     }
 
     this._grid[row][col].isHit = true
 
-    if (isAI && this._grid[row][col].shipId) {
-      this._aiHits.add(label)
+    return {
+      alreadyHit: false,
+      shipHit: this._grid[row][col].shipId !== undefined,
     }
-
-    return true
   }
 
   private generateGrid(): GridCell[][] {
@@ -243,81 +238,5 @@ export class BattleshipGrid {
     }
 
     return true
-  }
-
-  private getRandomCell(range: Range): string {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    const minLetterIndex = letters.indexOf(range.minLetter.toUpperCase())
-    const maxLetterIndex = letters.indexOf(range.maxLetter.toUpperCase())
-
-    const letter =
-      letters[
-        Math.floor(Math.random() * (maxLetterIndex - minLetterIndex + 1)) +
-          minLetterIndex
-      ]
-    const number =
-      Math.floor(Math.random() * (range.maxNumber - range.minNumber + 1)) +
-      range.minNumber
-
-    return letter + number
-  }
-
-  private aiRandomNotTriedCell(range: Range): string {
-    let hit = this.getRandomCell(range)
-    while (!this._aiShots.has(hit)) {
-      this._aiShots.add(hit)
-      return hit
-    }
-    return ''
-  }
-
-  private aiTargetShip(label: string): string {
-    const cell = this.labelToIndex(label)!
-
-    const directionsX = { left: -1, right: 1 }
-    const directionX = Math.random() < 0.5 ? 'left' : 'right'
-
-    const directionsY = { up: -1, down: 1 }
-    const directionY = Math.random() < 0.5 ? 'up' : 'down'
-
-    const direction = Math.random() < 0.5 ? 'X' : 'Y'
-
-    let hitRow = cell.row
-    let hitCol = cell.col
-
-    if (direction === 'X') {
-      hitRow += directionsX[directionX]
-    } else {
-      hitCol += directionsY[directionY]
-    }
-
-    return this.indexToLabel(hitRow, hitCol)!
-  }
-
-  private isFirstHit() {
-    return this._aiHits.size > 0
-  }
-
-  private getFirstHit(): string {
-    return this._aiHits.values().next().value as string
-  }
-
-  public aiMove(
-    range: Range = {
-      minLetter: 'A',
-      maxLetter: 'J',
-      minNumber: 1,
-      maxNumber: 10,
-    }
-  ) {
-    let input
-    if (this.isFirstHit()) {
-      input = this.aiTargetShip(this.getFirstHit())
-      console.log(`Target: ${input}`)
-    } else {
-      input = this.aiRandomNotTriedCell(range)!
-      console.log(`Random: ${input}`)
-    }
-    return input
   }
 }
