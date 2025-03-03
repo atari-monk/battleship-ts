@@ -29,7 +29,8 @@
     "time": [
       { "estimate": 30, "start": "11:26", "end": "13:24" },
       { "estimate": 120, "start": "13:57", "end": "15:36" },
-      { "estimate": 120, "start": "17:20", "end": "" }
+      { "estimate": 120, "start": "17:20", "end": "18:34" },
+      { "estimate": 30, "start": "21:05", "end": "" }
     ]
   }
 ]
