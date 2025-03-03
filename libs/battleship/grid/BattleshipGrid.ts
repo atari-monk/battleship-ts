@@ -1,5 +1,5 @@
-import { GridCell } from '../GridCell'
-import { HitResult } from '../HitResult'
+import { GridCell } from './GridCell'
+import { HitResult } from './HitResult'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]

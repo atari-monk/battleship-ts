@@ -22,6 +22,7 @@ interface PlayerConfig {
   style: string
   grid: BattleshipGrid
   hideShips: boolean
+  gridId: string
 }
 
 enum GAME_MODE {
@@ -71,6 +72,7 @@ const config: GameConfig = {
         style: style('red'),
         grid: player2Grid,
         hideShips: true,
+        gridId: 'player2Grid',
       },
     ],
     [
@@ -82,6 +84,7 @@ const config: GameConfig = {
         style: style('lightblue'),
         grid: player1Grid,
         hideShips: false,
+        gridId: 'player1Grid',
       },
     ],
   ]),
@@ -97,9 +100,10 @@ function printGameState() {
 }
 
 function printPlayer(config: PlayerConfig) {
-  const { name, style, grid, hideShips } = config
+  const { name, style, grid, gridId, hideShips } = config
   console.log(`%c${name}`, style)
   console.log(`%c${grid.toString(hideShips)}\n`, style)
+  renderGrid(gridId, grid)
 }
 
 async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
@@ -166,6 +170,10 @@ async function startGame() {
     }
     ;[attacker, defender] = tooglePlayers(attacker, defender)
   }
+}
+
+function renderGrid(gridId: string, grid: BattleshipGrid) {
+  document.getElementById(gridId)!.textContent = grid.toString()
 }
 
 printGameState()
