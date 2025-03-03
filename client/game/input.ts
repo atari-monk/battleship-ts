@@ -35,3 +35,20 @@ export function getInputFromConsole(playerName: string): Promise<string> {
     }
   })
 }
+
+export function waitForButtonClick(buttonId: string): Promise<void> {
+  return new Promise((resolve) => {
+    const button = document.getElementById(buttonId) as HTMLButtonElement
+    if (!button) throw new Error(`Button with ID "${buttonId}" not found`)
+
+    button.style.display = 'block'
+
+    const clickHandler = () => {
+      button.style.display = 'none'
+      button.removeEventListener('click', clickHandler)
+      resolve()
+    }
+
+    button.addEventListener('click', clickHandler)
+  })
+}
