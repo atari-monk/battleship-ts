@@ -1,2 +1,2 @@
-export { BattleshipGrid } from './BattleshipGrid'
-export { BattleshipAI } from './BattleshipAI'
+export { BattleshipGrid } from './grid/BattleshipGrid'
+export { BattleshipAI } from './ai/BattleshipAI'

@@ -28,7 +28,8 @@
     "day": "2025-03-03",
     "time": [
       { "estimate": 30, "start": "11:26", "end": "13:24" },
-      { "estimate": 120, "start": "13:57", "end": "15:36" }
+      { "estimate": 120, "start": "13:57", "end": "15:36" },
+      { "estimate": 120, "start": "17:20", "end": "" }
     ]
   }
 ]
