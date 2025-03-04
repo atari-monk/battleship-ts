@@ -2,17 +2,17 @@ import { BattleshipAI } from './BattleshipAI'
 import { IStrategy } from './IStrategy'
 import { RandomStrategy } from './RandomStrategy'
 import { State } from './State'
-import { TargetStrategy } from './TargetStrategy'
+import { ShipOrientationStrategy } from './ShipOrientationStrategy'
 
 export class StateMachine {
   private state: State
   private randomStrategy: IStrategy
-  private targetStrategy: IStrategy
+  private shipOrientationStrategy: IStrategy
 
   constructor(ai: BattleshipAI) {
     this.state = State.Random
     this.randomStrategy = new RandomStrategy(ai)
-    this.targetStrategy = new TargetStrategy(ai)
+    this.shipOrientationStrategy = new ShipOrientationStrategy(ai)
   }
 
   public setState(state: State): void {
@@ -21,8 +21,8 @@ export class StateMachine {
 
   public getStrategy(): IStrategy {
     switch (this.state) {
-      case State.Target:
-        return this.targetStrategy
+      case State.ShipOrientation:
+        return this.shipOrientationStrategy
       case State.Random:
       default:
         return this.randomStrategy
@@ -30,10 +30,10 @@ export class StateMachine {
   }
 
   public transition(ai: BattleshipAI): void {
-    //if (ai.isTarget()) {
-    //this.setState(State.Target)
-    //} else {
-    this.setState(State.Random)
-    //}
+    if (ai.isHit()) {
+      this.setState(State.ShipOrientation)
+    } else {
+      this.setState(State.Random)
+    }
   }
 }

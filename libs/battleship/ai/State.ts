@@ -1,4 +1,4 @@
 export enum State {
   Random,
-  Target,
+  ShipOrientation,
 }

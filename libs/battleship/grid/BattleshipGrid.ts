@@ -1,4 +1,5 @@
 import { GridCell } from './GridCell'
+import { GridUtils } from './GridUtils'
 import { HitResult } from './HitResult'
 
 export class BattleshipGrid {
@@ -57,29 +58,8 @@ export class BattleshipGrid {
     )
   }
 
-  public labelToIndex(label: string): { row: number; col: number } | null {
-    const match = label.match(/^([A-J])(\d{1,2})$/i)
-    if (!match) return null
-
-    const col = match[1].toUpperCase().charCodeAt(0) - 65
-    const row = parseInt(match[2], 10) - 1
-
-    return row >= 0 && row < this.rows && col >= 0 && col < this.cols
-      ? { row, col }
-      : null
-  }
-
-  public indexToLabel(row: number, col: number): string | null {
-    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return null
-
-    const letter = String.fromCharCode(col + 65)
-    const number = row + 1
-
-    return `${letter}${number}`
-  }
-
   public hitCell(label: string): HitResult {
-    const position = this.labelToIndex(label)
+    const position = GridUtils.labelToIndex(label, this.rows, this.cols)
     if (!position) throw new Error('labelToIndex fail')
 
     const { row, col } = position

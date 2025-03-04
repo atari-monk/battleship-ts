@@ -1,17 +1,19 @@
 import { BattleshipGrid } from '../grid/BattleshipGrid'
 import { Range } from '../grid/Range'
+import { ShipTarget } from './ShipTarget'
+import { ShipTracker } from './ShipTracker'
 import { StateMachine } from './StateMachine'
 
 export class BattleshipAI {
   public enemyGrid: BattleshipGrid
   public shotsTaken: Set<string>
-  private hits: Set<string>
   private stateMachine: StateMachine
+  private shipTracker: ShipTracker
 
   constructor(enemyGrid: BattleshipGrid) {
     this.enemyGrid = enemyGrid
+    this.shipTracker = new ShipTracker()
     this.shotsTaken = new Set()
-    this.hits = new Set()
     this.stateMachine = new StateMachine(this)
   }
 
@@ -27,15 +29,16 @@ export class BattleshipAI {
     const strategy = this.stateMachine.getStrategy()
     const shot = strategy.attack(range)
     const result = this.enemyGrid.hitCell(shot)
-    if (result.shipHit) this.hits.add(shot)
+    if (result.shipHit) this.shipTracker.handleShot(shot)
+    strategy.updateState()
     return result
   }
 
-  public isTarget() {
-    return this.hits.size > 0
+  public isHit(): boolean {
+    return this.shipTracker.getFirstActiveHit() !== undefined
   }
 
-  public getTarget(): string {
-    return this.hits.values().next().value || ''
+  public getHit(): ShipTarget | undefined {
+    return this.shipTracker.getFirstActiveHit()
   }
 }

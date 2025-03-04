@@ -19,4 +19,6 @@ export class RandomStrategy implements IStrategy {
     console.log(`Random: ${shot}`)
     return shot
   }
+
+  updateState(): void {}
 }
