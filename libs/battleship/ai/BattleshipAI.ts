@@ -25,17 +25,17 @@ export class BattleshipAI {
   ) {
     this.stateMachine.transition(this)
     const strategy = this.stateMachine.getStrategy()
-    const move = strategy.attack(range)
-    const result = this.enemyGrid.hitCell(move)
-    if (result.shipHit) this.hits.add(move)
+    const shot = strategy.attack(range)
+    const result = this.enemyGrid.hitCell(shot)
+    if (result.shipHit) this.hits.add(shot)
     return result
   }
 
   public isTarget() {
-    return false
+    return this.hits.size > 0
   }
 
   public getTarget(): string {
-    return ''
+    return this.hits.values().next().value || ''
   }
 }

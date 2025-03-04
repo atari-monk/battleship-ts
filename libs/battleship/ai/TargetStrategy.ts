@@ -4,38 +4,50 @@ import { Range } from '../grid/Range'
 
 export class TargetStrategy implements IStrategy {
   private _ai
+  private hits: { row: number; col: number }[] = []
+  private orientation: 'horizontal' | 'vertical' | null = null
 
   constructor(ai: BattleshipAI) {
     this._ai = ai
   }
 
   attack(range: Range): string {
-    const move = this.attackShip()
-    console.log(`Target: ${move}`)
-    return move
-  }
-
-  private attackShip(): string {
     const target = this._ai.getTarget()
     const cell = this._ai.enemyGrid.labelToIndex(target)!
 
-    const directionsX = { left: -1, right: 1 }
-    const directionX = Math.random() < 0.5 ? 'left' : 'right'
-
-    const directionsY = { up: -1, down: 1 }
-    const directionY = Math.random() < 0.5 ? 'up' : 'down'
-
-    const direction = Math.random() < 0.5 ? 'X' : 'Y'
-
-    let hitRow = cell.row
-    let hitCol = cell.col
-
-    if (direction === 'X') {
-      hitRow += directionsX[directionX]
-    } else {
-      hitCol += directionsY[directionY]
+    this.hits.push(cell)
+    if (this.hits.length === 2) {
+      this.determineOrientation()
     }
 
-    return this._ai.enemyGrid.indexToLabel(hitRow, hitCol)!
+    const nextMove = this.getNextMove(cell)
+    const shot = this._ai.enemyGrid.indexToLabel(nextMove.row, nextMove.col)!
+
+    console.log(`Target: ${shot}`)
+    return shot
+  }
+
+  private determineOrientation() {
+    const [firstHit, secondHit] = this.hits
+    if (firstHit.row === secondHit.row) {
+      this.orientation = 'horizontal'
+    } else if (firstHit.col === secondHit.col) {
+      this.orientation = 'vertical'
+    }
+  }
+
+  private getNextMove(cell: { row: number; col: number }) {
+    if (this.orientation === 'horizontal') {
+      return { row: cell.row, col: cell.col + (Math.random() < 0.5 ? -1 : 1) }
+    } else if (this.orientation === 'vertical') {
+      return { row: cell.row + (Math.random() < 0.5 ? -1 : 1), col: cell.col }
+    }
+
+    const isHorizontal = Math.random() < 0.5
+    if (isHorizontal) {
+      return { row: cell.row, col: cell.col + (Math.random() < 0.5 ? -1 : 1) }
+    } else {
+      return { row: cell.row + (Math.random() < 0.5 ? -1 : 1), col: cell.col }
+    }
   }
 }
