@@ -28,6 +28,10 @@ export function printGameState(player: PLAYER, gameConfig: GameConfig) {
   printPlayer(player, gameConfig)
 }
 
-export function style(color: string) {
+export function bigStyle(color: string) {
   return `color: ${color}; background-color: black; font-size: 20px; font-weight: bold;`
+}
+
+export function colorStyle(color: string) {
+  return `color: ${color};`
 }

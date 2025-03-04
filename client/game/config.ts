@@ -3,7 +3,7 @@ import { FLEET_TYPE } from './type/FLEET_TYPE'
 import { GAME_MODE } from './type/GAME_MODE'
 import { PLAYER } from './type/PLAYER'
 import { PLAYER_TYPE } from './type/PLAYER_TYPE'
-import { style } from './render'
+import { bigStyle } from './render'
 import { GameConfig } from './type/GameConfig'
 import { PlayerConfig } from './type/PlayerConfig'
 
@@ -37,7 +37,7 @@ export const config: GameConfig = {
         role: PLAYER.PLAYER2,
         type: PLAYER_TYPE.AI,
         name: 'Player 2',
-        style: style('red'),
+        style: bigStyle('red'),
         grid: player2Grid,
         hideShips: true,
       },
@@ -48,7 +48,7 @@ export const config: GameConfig = {
         role: PLAYER.PLAYER1,
         type: PLAYER_TYPE.HUMAN,
         name: 'Player 1',
-        style: style('lightblue'),
+        style: bigStyle('lightblue'),
         grid: player1Grid,
         hideShips: false,
       },

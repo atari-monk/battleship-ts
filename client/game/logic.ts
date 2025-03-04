@@ -1,6 +1,6 @@
-import { handlePlayerInput } from './input'
+import { getInputFromPage, setInputResult } from './input'
 import { PLAYER_TYPE } from './type/PLAYER_TYPE'
-import { style } from './render'
+import { colorStyle } from './render'
 import { ai } from './config'
 import { PlayerConfig } from './type/PlayerConfig'
 
@@ -13,15 +13,20 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { grid } = defender
 
   let validMove = false
-  let hitResult = { alreadyHit: false, shipHit: false }
+  let hitResult = {
+    label: '',
+    alreadyHit: false,
+    shipHit: false,
+    log: (isShipHit: boolean) => '',
+  }
 
   while (!validMove) {
-    let input: string = ''
+    let shot: string = ''
 
     if (attacker.type === PLAYER_TYPE.HUMAN) {
-      //input = await getInputFromConsole(attackerName)
-      input = await handlePlayerInput(attackerName)
-      hitResult = grid.hitCell(input)
+      shot = await getInputFromPage(attackerName)
+      hitResult = grid.hitCell(shot)
+      console.log(`${attackerName}:`, shot, hitResult.shipHit ? 'hit' : 'miss')
     } else if (attacker.type === PLAYER_TYPE.AI) {
       hitResult = ai.aiMove({
         minLetter: 'C',
@@ -29,13 +34,18 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
         minNumber: 5,
         maxNumber: 5,
       })
+      console.log(hitResult.log(hitResult.shipHit))
     }
 
     const { alreadyHit } = hitResult
     if (alreadyHit) {
-      console.log(`%cThis cell was already hit. Try again.`, style('yellow'))
+      console.log(
+        `%cThis cell was already hit. Try again.`,
+        colorStyle('yellow')
+      )
     } else {
       validMove = true
+      await setInputResult(attacker.name, hitResult.label, hitResult.shipHit)
     }
   }
 }

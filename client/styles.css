@@ -26,3 +26,8 @@ pre {
 .player2Grid {
   color: red;
 }
+
+p {
+  color: white;
+  user-select: none;
+}

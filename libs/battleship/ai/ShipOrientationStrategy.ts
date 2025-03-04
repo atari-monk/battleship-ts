@@ -8,6 +8,7 @@ import {
 } from './Orientation'
 import { coinToss, randomSign } from './random'
 import { GridUtils } from '../grid/GridUtils'
+import { AttackResult } from './AttackResult'
 
 enum DIRECTION {
   LEFT,
@@ -25,13 +26,20 @@ export class ShipOrientationStrategy implements IStrategy {
     this._ai = ai
   }
 
-  attack(range: Range): string {
+  attack(range: Range): AttackResult {
     const target = this._ai.getHit()!
     const hit = GridUtils.labelToIndex([...target.hits][0])!
     const next = this.getNextMove(hit)
     const shot = GridUtils.indexToLabel(next.row, next.col)!
-    console.log(`Target: ${shot}`)
-    return shot
+    return {
+      shot,
+      log: (isShipHit: boolean) =>
+        `Player 2: ${shot} ${
+          isShipHit ? 'hit' : 'miss'
+        } (Strategy: Ship Orientation) orientation: ${
+          ShipOrientation[target.orientation]
+        }`,
+    }
   }
 
   updateState(): void {

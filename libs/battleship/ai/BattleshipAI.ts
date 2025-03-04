@@ -27,10 +27,11 @@ export class BattleshipAI {
   ) {
     this.stateMachine.transition(this)
     const strategy = this.stateMachine.getStrategy()
-    const shot = strategy.attack(range)
+    const { shot, log } = strategy.attack(range)
     const result = this.enemyGrid.hitCell(shot)
     if (result.shipHit) this.shipTracker.handleShot(shot)
     strategy.updateState()
+    result.log = log
     return result
   }
 

@@ -10,10 +10,17 @@ export async function getInputFromPage(playerName: string): Promise<string> {
       'inputResult'
     ) as HTMLParagraphElement
 
+    inputField.style.display = 'block'
+    submitButton.style.display = 'block'
+    resultDisplay.style.display = 'none'
+
     submitButton.onclick = () => {
       const input = inputField.value.trim()
       if (input !== '') {
         resultDisplay.textContent = `${playerName}: ${input}`
+        resultDisplay.style.display = 'block'
+        inputField.style.display = 'none'
+        submitButton.style.display = 'none'
         resolve(input)
         inputField.value = ''
       }
@@ -21,10 +28,23 @@ export async function getInputFromPage(playerName: string): Promise<string> {
   })
 }
 
-export async function handlePlayerInput(playerName: string) {
-  const move = await getInputFromPage(playerName)
-  console.log('Move:', move)
-  return move
+export async function setInputResult(
+  playerName: string,
+  shot: string,
+  result: boolean
+): Promise<void> {
+  return new Promise((resolve) => {
+    const resultDisplay = document.getElementById(
+      'inputResult'
+    ) as HTMLParagraphElement
+
+    resultDisplay.textContent = `${playerName}: ${shot} ${
+      result ? 'hit' : 'miss'
+    }`
+    resultDisplay.style.display = 'block'
+
+    resolve()
+  })
 }
 
 export function getInputFromConsole(playerName: string): Promise<string> {

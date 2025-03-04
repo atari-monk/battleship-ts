@@ -65,12 +65,17 @@ export class BattleshipGrid {
     const { row, col } = position
 
     if (this._grid[row][col].isHit) {
-      return { alreadyHit: true, shipHit: false }
+      return {
+        label: label,
+        alreadyHit: true,
+        shipHit: false,
+      }
     }
 
     this._grid[row][col].isHit = true
 
     return {
+      label: label,
       alreadyHit: false,
       shipHit: this._grid[row][col].shipId !== undefined,
     }
