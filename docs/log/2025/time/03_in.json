@@ -38,7 +38,7 @@
     "time": [
       { "taskId": 1, "estimate": 30, "start": "10:04", "end": "10:45" },
       { "taskId": 1, "estimate": 120, "start": "10:46", "end": "13:48" },
-      { "taskId": 2, "estimate": 120, "start": "16:00", "end": "17:27" }
+      { "taskId": 2, "estimate": 120, "start": "16:00", "end": "17:45" }
     ]
   }
 ]
