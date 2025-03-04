@@ -13,8 +13,9 @@ export async function getInputFromPage(playerName: string): Promise<string> {
     inputField.style.display = 'block'
     submitButton.style.display = 'block'
     resultDisplay.style.display = 'none'
+    inputField.focus()
 
-    submitButton.onclick = () => {
+    const submitInput = () => {
       const input = inputField.value.trim()
       if (input !== '') {
         resultDisplay.textContent = `${playerName}: ${input}`
@@ -23,8 +24,19 @@ export async function getInputFromPage(playerName: string): Promise<string> {
         submitButton.style.display = 'none'
         resolve(input)
         inputField.value = ''
+        inputField.removeEventListener('keydown', enterHandler)
       }
     }
+
+    const enterHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        submitInput()
+      }
+    }
+
+    submitButton.onclick = submitInput
+    inputField.addEventListener('keydown', enterHandler)
   })
 }
 
@@ -63,12 +75,23 @@ export function waitForButtonClick(buttonId: string): Promise<void> {
 
     button.style.display = 'block'
 
-    const clickHandler = () => {
+    const triggerClick = () => {
       button.style.display = 'none'
       button.removeEventListener('click', clickHandler)
+      document.removeEventListener('keydown', enterHandler)
       resolve()
     }
 
+    const clickHandler = () => triggerClick()
+
+    const enterHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        setTimeout(triggerClick, 100)
+      }
+    }
+
     button.addEventListener('click', clickHandler)
+    setTimeout(() => document.addEventListener('keydown', enterHandler), 200)
   })
 }
