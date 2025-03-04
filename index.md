@@ -2,9 +2,16 @@
 
 ### 2025
 
-- [02](./docs/log/2025/02.md)
-- [03](./docs/log/2025/03.md)
+#### Task
 
-## Docs
+- [02](./docs/log/2025/task/02.md)
+- [03](./docs/log/2025/task/03.md)
+
+#### Time
+
+- [02](./docs/log/2025/time/02_out.json)
+- [03](./docs/log/2025/time/03_out.json)
+
+## Doc
 
 - [Project Configuration](./docs/project_configuration.md)
