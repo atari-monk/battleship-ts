@@ -1,6 +1,6 @@
 import { GridUtils } from '../grid/GridUtils'
-import { ShipOrientation } from './Orientation'
-import { ShipTarget } from './ShipTarget'
+import { ShipOrientation } from './type/Orientation'
+import { ShipTarget } from './type/ShipTarget'
 
 export class ShipTracker {
   private ships: Set<ShipTarget> = new Set()

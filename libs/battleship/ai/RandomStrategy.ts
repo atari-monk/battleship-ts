@@ -1,8 +1,8 @@
 import { BattleshipAI } from './BattleshipAI'
-import { IStrategy } from './IStrategy'
-import { Range } from '../grid/Range'
-import { RandomUtil } from './RandomUtil'
-import { AttackResult } from './AttackResult'
+import { IStrategy } from './type/IStrategy'
+import { Range } from '../grid/type/Range'
+import { RandomUtil } from './util/RandomUtil'
+import { AttackResult } from './type/AttackResult'
 
 export class RandomStrategy implements IStrategy {
   private _ai
@@ -20,7 +20,7 @@ export class RandomStrategy implements IStrategy {
     return {
       shot,
       log: (isShipHit: boolean) =>
-        `Player 2: ${shot} ${isShipHit ? 'hit' : 'miss'} (Strategy: Random)`,
+        `Player 2: ${shot} ${isShipHit ? 'hit' : 'miss'} AI: Random`,
     }
   }
 

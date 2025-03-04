@@ -1,6 +1,6 @@
 import { BattleshipGrid } from '../grid/BattleshipGrid'
-import { Range } from '../grid/Range'
-import { ShipTarget } from './ShipTarget'
+import { Range } from '../grid/type/Range'
+import { ShipTarget } from './type/ShipTarget'
 import { ShipTracker } from './ShipTracker'
 import { StateMachine } from './StateMachine'
 

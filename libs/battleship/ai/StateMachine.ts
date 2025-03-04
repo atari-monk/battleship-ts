@@ -1,7 +1,7 @@
 import { BattleshipAI } from './BattleshipAI'
-import { IStrategy } from './IStrategy'
+import { IStrategy } from './type/IStrategy'
 import { RandomStrategy } from './RandomStrategy'
-import { State } from './State'
+import { State } from './type/State'
 import { ShipOrientationStrategy } from './ShipOrientationStrategy'
 
 export class StateMachine {

@@ -1,4 +1,4 @@
-import { Range } from '../grid/Range'
+import { Range } from '../../grid/type/Range'
 
 export class RandomUtil {
   static getRandomCell(range: Range): string {

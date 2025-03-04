@@ -3,6 +3,7 @@ import { PLAYER_TYPE } from './type/PLAYER_TYPE'
 import { colorStyle } from './render'
 import { ai } from './config'
 import { PlayerConfig } from './type/PlayerConfig'
+import { HitResult } from '../../libs/battleship/grid/type/HitResult'
 
 export function tooglePlayers(attacker: PlayerConfig, defender: PlayerConfig) {
   return [defender, attacker]
@@ -13,11 +14,11 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   const { grid } = defender
 
   let validMove = false
-  let hitResult = {
+  let hitResult: HitResult = {
     label: '',
     alreadyHit: false,
     shipHit: false,
-    log: (isShipHit: boolean) => '',
+    log: (isShipHit) => '',
   }
 
   while (!validMove) {
@@ -34,7 +35,7 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
         minNumber: 5,
         maxNumber: 5,
       })
-      console.log(hitResult.log(hitResult.shipHit))
+      console.log(hitResult.log!(hitResult.shipHit))
     }
 
     const { alreadyHit } = hitResult

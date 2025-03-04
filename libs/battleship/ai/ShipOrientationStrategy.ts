@@ -1,21 +1,15 @@
 import { BattleshipAI } from './BattleshipAI'
-import { IStrategy } from './IStrategy'
-import { Range } from '../grid/Range'
+import { IStrategy } from './type/IStrategy'
+import { Range } from '../grid/type/Range'
 import {
   getRandomOrientation,
   Orientation,
   ShipOrientation,
-} from './Orientation'
-import { coinToss, randomSign } from './random'
+} from './type/Orientation'
+import { coinToss, randomSign } from './util/random'
 import { GridUtils } from '../grid/GridUtils'
-import { AttackResult } from './AttackResult'
-
-enum DIRECTION {
-  LEFT,
-  RIGHT,
-  UP,
-  DOWN,
-}
+import { AttackResult } from './type/AttackResult'
+import { DIRECTION } from './type/DIRECTION'
 
 export class ShipOrientationStrategy implements IStrategy {
   private _ai
@@ -36,7 +30,7 @@ export class ShipOrientationStrategy implements IStrategy {
       log: (isShipHit: boolean) =>
         `Player 2: ${shot} ${
           isShipHit ? 'hit' : 'miss'
-        } (Strategy: Ship Orientation) orientation: ${
+        } AI: Ship Orientation orientation: ${
           ShipOrientation[target.orientation]
         }`,
     }
