@@ -18,13 +18,12 @@ export async function startGame() {
 
     printGameState(defender.role, config)
 
-    await waitForButtonClick('continueButton')
-
     if (isGameOver) {
       console.log('Game over! All ships have been sunk.')
       break
     }
 
+    await waitForButtonClick('continueButton')
     ;[attacker, defender] = tooglePlayers(attacker, defender)
   }
 }

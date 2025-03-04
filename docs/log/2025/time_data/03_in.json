@@ -35,6 +35,9 @@
   },
   {
     "day": "2025-03-04",
-    "time": [{ "taskId": 1, "estimate": 30, "start": "10:04", "end": "10:45" }]
+    "time": [
+      { "taskId": 1, "estimate": 30, "start": "10:04", "end": "10:45" },
+      { "taskId": 1, "estimate": 30, "start": "10:46", "end": "" }
+    ]
   }
 ]

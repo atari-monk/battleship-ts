@@ -30,10 +30,10 @@ export class StateMachine {
   }
 
   public transition(ai: BattleshipAI): void {
-    if (ai.isTarget()) {
-      this.setState(State.Target)
-    } else {
-      this.setState(State.Random)
-    }
+    //if (ai.isTarget()) {
+    //this.setState(State.Target)
+    //} else {
+    this.setState(State.Random)
+    //}
   }
 }
