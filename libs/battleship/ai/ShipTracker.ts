@@ -1,4 +1,4 @@
-import { GridUtils } from '../grid/GridUtils'
+import { labelToIndex } from '../util/grid'
 import { ShipOrientation } from './type/Orientation'
 import { ShipTarget } from './type/ShipTarget'
 
@@ -20,8 +20,20 @@ export class ShipTracker {
   }
 
   getFirstActiveHit(): ShipTarget | undefined {
-    for (const hit of this.ships) {
-      if (hit.orientation === ShipOrientation.Unknown && !hit.isSunk) return hit
+    for (const ship of this.ships) {
+      if (ship.orientation === ShipOrientation.Unknown && !ship.isSunk)
+        return ship
+    }
+  }
+
+  getShipToSink(): ShipTarget | undefined {
+    for (const ship of this.ships) {
+      if (
+        ship.orientation !== ShipOrientation.Unknown &&
+        !ship.isSunk &&
+        ship.hits.size === 2
+      )
+        return ship
     }
   }
 
@@ -41,9 +53,8 @@ export class ShipTracker {
     shot: string,
     orientation: ShipOrientation
   ): boolean {
-    const { row: existingX, col: existingY } =
-      GridUtils.labelToIndex(existingHit)!
-    const { row: shotX, col: shotY } = GridUtils.labelToIndex(shot)!
+    const { row: existingX, col: existingY } = labelToIndex(existingHit)!
+    const { row: shotX, col: shotY } = labelToIndex(shot)!
 
     if (orientation === ShipOrientation.Unknown) {
       return (

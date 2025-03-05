@@ -157,7 +157,13 @@
         "taskId": 2,
         "estimate": 30,
         "start": "15:05",
-        "end": ""
+        "end": "15:22"
+      },
+      {
+        "taskId": 3,
+        "estimate": 30,
+        "start": "15:23",
+        "end": "16:22"
       }
     ]
   }

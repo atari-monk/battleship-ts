@@ -3,6 +3,7 @@ import { Range } from '../grid/type/Range'
 import { ShipTarget } from './type/ShipTarget'
 import { ShipTracker } from './ShipTracker'
 import { StateMachine } from './StateMachine'
+import { ShipOrientation } from './type/Orientation'
 
 export class BattleshipAI {
   public enemyGrid: BattleshipGrid
@@ -35,11 +36,19 @@ export class BattleshipAI {
     return result
   }
 
-  public isHit(): boolean {
+  public isShipHit(): boolean {
     return this.shipTracker.getFirstActiveHit() !== undefined
   }
 
-  public getHit(): ShipTarget | undefined {
+  public getHitShip(): ShipTarget | undefined {
     return this.shipTracker.getFirstActiveHit()
+  }
+
+  public isShipToSink() {
+    return this.shipTracker.getShipToSink() !== undefined
+  }
+
+  public getShipToSink(): ShipTarget | undefined {
+    return this.shipTracker.getShipToSink()
   }
 }

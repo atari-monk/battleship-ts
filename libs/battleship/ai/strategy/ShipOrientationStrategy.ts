@@ -1,15 +1,15 @@
-import { BattleshipAI } from './BattleshipAI'
-import { IStrategy } from './type/IStrategy'
-import { Range } from '../grid/type/Range'
+import { BattleshipAI } from '../BattleshipAI'
+import { IStrategy } from '../type/IStrategy'
+import { Range } from '../../grid/type/Range'
 import {
   getRandomOrientation,
   Orientation,
   ShipOrientation,
-} from './type/Orientation'
-import { coinToss, randomSign } from './util/random'
-import { GridUtils } from '../grid/GridUtils'
-import { AttackResult } from './type/AttackResult'
-import { DIRECTION } from './type/DIRECTION'
+} from '../type/Orientation'
+import { coinToss, randomSign } from '../../util/random'
+import { AttackResult } from '../type/AttackResult'
+import { DIRECTION } from '../type/DIRECTION'
+import { indexToLabel, labelToIndex } from '../../util/grid'
 
 export class ShipOrientationStrategy implements IStrategy {
   private _ai
@@ -21,10 +21,10 @@ export class ShipOrientationStrategy implements IStrategy {
   }
 
   attack(range: Range): AttackResult {
-    const target = this._ai.getHit()!
-    const hit = GridUtils.labelToIndex([...target.hits][0])!
+    const target = this._ai.getHitShip()!
+    const hit = labelToIndex([...target.hits][0])!
     const next = this.getNextMove(hit)
-    const shot = GridUtils.indexToLabel(next.row, next.col)!
+    const shot = indexToLabel(next.row, next.col)!
     return {
       shot,
       log: (isShipHit: boolean) =>
@@ -37,11 +37,11 @@ export class ShipOrientationStrategy implements IStrategy {
   }
 
   updateState(): void {
-    const target = this._ai.getHit()!
+    const target = this._ai.getHitShip()!
     if (target.hits.size !== 2) return
     const [firstHit, secondHit] = [...target.hits]
-    const hitPos1 = GridUtils.labelToIndex(firstHit)!
-    const hitPos2 = GridUtils.labelToIndex(secondHit)!
+    const hitPos1 = labelToIndex(firstHit)!
+    const hitPos2 = labelToIndex(secondHit)!
 
     if (hitPos1.row === hitPos2.row) {
       target.orientation = ShipOrientation.Horizontal

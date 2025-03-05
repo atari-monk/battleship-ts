@@ -6,8 +6,8 @@ import { waitForButtonClick } from './input'
 
 export async function startGame() {
   let isGameOver = false
-  let attacker = config.players.get(PLAYER.PLAYER1)!
-  let defender = config.players.get(PLAYER.PLAYER2)!
+  let attacker = config.players.get(PLAYER.PLAYER2)!
+  let defender = config.players.get(PLAYER.PLAYER1)!
 
   while (!isGameOver) {
     printGameState(defender.role, config)
@@ -24,6 +24,6 @@ export async function startGame() {
     }
 
     await waitForButtonClick('continueButton')
-    ;[attacker, defender] = tooglePlayers(attacker, defender)
+    //;[attacker, defender] = tooglePlayers(attacker, defender)
   }
 }

@@ -1,8 +1,8 @@
-import { BattleshipAI } from './BattleshipAI'
-import { IStrategy } from './type/IStrategy'
-import { Range } from '../grid/type/Range'
-import { RandomUtil } from './util/RandomUtil'
-import { AttackResult } from './type/AttackResult'
+import { BattleshipAI } from '../BattleshipAI'
+import { IStrategy } from '../type/IStrategy'
+import { Range } from '../../grid/type/Range'
+import { AttackResult } from '../type/AttackResult'
+import { getRandomCell } from '../../util/grid'
 
 export class RandomStrategy implements IStrategy {
   private _ai
@@ -12,9 +12,9 @@ export class RandomStrategy implements IStrategy {
   }
 
   attack(range: Range): AttackResult {
-    let shot = RandomUtil.getRandomCell(range)
+    let shot = getRandomCell(range)
     while (this._ai.shotsTaken.has(shot)) {
-      shot = RandomUtil.getRandomCell(range)
+      shot = getRandomCell(range)
     }
     this._ai.shotsTaken.add(shot)
     return {

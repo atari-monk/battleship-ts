@@ -24,7 +24,7 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
   while (!validMove) {
     let shot: string = ''
 
-    if (attacker.type === PLAYER_TYPE.HUMAN) {
+    if (attacker.type === PLAYER_TYPE.HUMAN && false) {
       shot = await getInputFromPage(attackerName)
       hitResult = grid.hitCell(shot)
       console.log(`${attackerName}:`, shot, hitResult.shipHit ? 'hit' : 'miss')

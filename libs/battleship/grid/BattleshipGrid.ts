@@ -1,5 +1,5 @@
+import { labelToIndex } from '../util/grid'
 import { GridCell } from './type/GridCell'
-import { GridUtils } from './GridUtils'
 import { HitResult } from './type/HitResult'
 
 export class BattleshipGrid {
@@ -59,7 +59,7 @@ export class BattleshipGrid {
   }
 
   public hitCell(label: string): HitResult {
-    const position = GridUtils.labelToIndex(label, this.rows, this.cols)
+    const position = labelToIndex(label, this.rows, this.cols)
     if (!position) throw new Error('labelToIndex fail')
 
     const { row, col } = position
