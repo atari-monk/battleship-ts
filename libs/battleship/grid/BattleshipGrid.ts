@@ -1,3 +1,4 @@
+import { DIRECTION } from '../ai/type/DIRECTION'
 import { labelToIndex } from '../util/grid'
 import { GridCell } from './type/GridCell'
 import { HitResult } from './type/HitResult'
@@ -79,6 +80,24 @@ export class BattleshipGrid {
       alreadyHit: false,
       shipHit: this._grid[row][col].shipId !== undefined,
     }
+  }
+
+  public isMissNextTo(label: string, direction: DIRECTION): boolean {
+    const position = labelToIndex(label, this.rows, this.cols)
+    if (!position) return false
+
+    let { row, col } = position
+
+    if (direction === DIRECTION.LEFT) col -= 1
+    if (direction === DIRECTION.RIGHT) col += 1
+    if (direction === DIRECTION.UP) row -= 1
+    if (direction === DIRECTION.DOWN) row += 1
+
+    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return false
+
+    return (
+      this._grid[row][col].isHit && this._grid[row][col].shipId === undefined
+    )
   }
 
   private generateGrid(): GridCell[][] {

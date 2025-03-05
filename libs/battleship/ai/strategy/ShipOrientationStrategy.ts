@@ -25,6 +25,9 @@ export class ShipOrientationStrategy implements IStrategy {
     const hit = labelToIndex([...target.hits][0])!
     const next = this.getNextMove(hit)
     const shot = indexToLabel(next.row, next.col)!
+
+    this._ai.shotsTaken.add(shot)
+
     return {
       shot,
       log: (isShipHit: boolean) =>

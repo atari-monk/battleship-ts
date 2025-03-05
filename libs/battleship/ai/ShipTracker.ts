@@ -64,11 +64,11 @@ export class ShipTracker {
     }
 
     if (orientation === ShipOrientation.Horizontal) {
-      return existingY === shotY && Math.abs(existingX - shotX) === 1
+      return existingX === shotX && Math.abs(existingY - shotY) === 1
     }
 
     if (orientation === ShipOrientation.Vertical) {
-      return existingX === shotX && Math.abs(existingY - shotY) === 1
+      return existingY === shotY && Math.abs(existingX - shotX) === 1
     }
 
     return false

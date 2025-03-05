@@ -3,7 +3,6 @@ import { Range } from '../grid/type/Range'
 import { ShipTarget } from './type/ShipTarget'
 import { ShipTracker } from './ShipTracker'
 import { StateMachine } from './StateMachine'
-import { ShipOrientation } from './type/Orientation'
 
 export class BattleshipAI {
   public enemyGrid: BattleshipGrid

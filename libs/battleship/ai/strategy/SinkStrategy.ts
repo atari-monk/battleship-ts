@@ -19,12 +19,19 @@ export class SinkStrategy implements IStrategy {
 
     let shot = ''
     if (target?.orientation === ShipOrientation.Horizontal) {
-      let direction = DIRECTION.LEFT
-      if (coinToss()) direction = DIRECTION.LEFT
-      else direction = DIRECTION.RIGHT
+      let direction = this.getRandomDirection()
 
-      const cell = this.getLabelsFromSet(target!.hits, direction)!
-      const cellIndex = labelToIndex(cell)
+      let cell = this.getLabelsFromSet(target!.hits, direction)!
+      
+      const isEnd = this._ai.enemyGrid.isMissNextTo(cell, direction)
+
+      if (isEnd) {
+        direction = this.getOppositeDirection(direction)
+        cell = this.getLabelsFromSet(target!.hits, direction)!
+      }
+
+      const cellIndex = labelToIndex(cell)!
+
       let shotIndex: { row: number; col: number } = {
         row: cellIndex!.row,
         col: cellIndex!.col,
@@ -72,5 +79,13 @@ export class SinkStrategy implements IStrategy {
     } else {
       throw new Error("Direction must be 'left' or 'right'")
     }
+  }
+
+  private getRandomDirection(): DIRECTION {
+    return coinToss() ? DIRECTION.LEFT : DIRECTION.RIGHT
+  }
+
+  private getOppositeDirection(direction: DIRECTION): DIRECTION {
+    return direction === DIRECTION.LEFT ? DIRECTION.RIGHT : DIRECTION.LEFT
   }
 }
