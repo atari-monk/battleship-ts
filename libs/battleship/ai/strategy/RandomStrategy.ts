@@ -12,11 +12,14 @@ export class RandomStrategy implements IStrategy {
   }
 
   attack(range: Range): AttackResult {
-    let shot = getRandomCell(range)
+    let shot: string = getRandomCell(range)
+
     while (this._ai.shotsTaken.has(shot)) {
       shot = getRandomCell(range)
     }
+    
     this._ai.shotsTaken.add(shot)
+
     return {
       shot,
       log: (isShipHit: boolean) =>

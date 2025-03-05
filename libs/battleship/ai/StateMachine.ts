@@ -35,10 +35,10 @@ export class StateMachine {
   }
 
   public transition(ai: BattleshipAI): void {
-    if (ai.isShipHit()) {
-      this.setState(State.ShipOrientation)
-    } else if (ai.isShipToSink()) {
+    if (ai.isShipToSink()) {
       this.setState(State.Sink)
+    } else if (ai.isShipHit()) {
+      this.setState(State.ShipOrientation)
     } else {
       this.setState(State.Random)
     }

@@ -48,6 +48,8 @@ export class ShipOrientationStrategy implements IStrategy {
     } else if (hitPos1.col === hitPos2.col) {
       target.orientation = ShipOrientation.Vertical
     }
+
+    this.reset()
   }
 
   private getNextMove(hit: { row: number; col: number }) {
@@ -60,23 +62,29 @@ export class ShipOrientationStrategy implements IStrategy {
       this.orientation = Orientation.Horizontal
     }
 
+    let next = { row: hit.row, col: hit.col }
+
     if (this.orientation === Orientation.Horizontal) {
       if (!this.counter.has(DIRECTION.LEFT) && coinToss()) {
         this.counter.add(DIRECTION.LEFT)
-        return { row: hit.row - 1, col: hit.col }
+        next.row--
       } else if (!this.counter.has(DIRECTION.RIGHT)) {
         this.counter.add(DIRECTION.RIGHT)
-        return { row: hit.row + 1, col: hit.col }
+        next.row++
       }
     } else {
       if (!this.counter.has(DIRECTION.DOWN) && coinToss()) {
         this.counter.add(DIRECTION.DOWN)
-        return { row: hit.row, col: hit.col - 1 }
+        next.col--
       } else if (!this.counter.has(DIRECTION.UP)) {
         this.counter.add(DIRECTION.UP)
-        return { row: hit.row, col: hit.col + 1 }
+        next.col++
       }
     }
-    return { row: hit.row + randomSign(), col: hit.col + randomSign() }
+    return next
+  }
+
+  private reset() {
+    this.counter.clear()
   }
 }

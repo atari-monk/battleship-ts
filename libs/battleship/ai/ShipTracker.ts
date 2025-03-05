@@ -31,7 +31,7 @@ export class ShipTracker {
       if (
         ship.orientation !== ShipOrientation.Unknown &&
         !ship.isSunk &&
-        ship.hits.size === 2
+        ship.hits.size >= 2
       )
         return ship
     }
