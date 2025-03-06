@@ -6,7 +6,7 @@ import {
   Orientation,
   ShipOrientation,
 } from '../type/Orientation'
-import { coinToss, randomSign } from '../../util/random'
+import { coinToss } from '../../util/random'
 import { AttackResult } from '../type/AttackResult'
 import { DIRECTION } from '../type/DIRECTION'
 import { indexToLabel, labelToIndex } from '../../util/grid'
