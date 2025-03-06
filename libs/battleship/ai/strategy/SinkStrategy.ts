@@ -22,7 +22,7 @@ export class SinkStrategy implements IStrategy {
       let direction = this.getRandomDirection()
 
       let cell = this.getLabelsFromSet(target!.hits, direction)!
-      
+
       const isEnd = this._ai.enemyGrid.isMissNextTo(cell, direction)
 
       if (isEnd) {
@@ -55,16 +55,20 @@ export class SinkStrategy implements IStrategy {
     labels: Set<string>,
     direction: DIRECTION
   ): string | null {
-    const labelArray = Array.from(labels).sort()
+    if (labels.size === 0) return null
 
-    if (labelArray.length < 2) {
-      throw new Error('Not enough labels in the set.')
-    }
+    const labelArray = Array.from(labels)
 
-    const label1 = labelArray[0]
-    const label2 = labelArray[1]
+    labelArray.sort((a, b) => {
+      const { row: xA, col: yA } = labelToIndex(a)!
+      const { row: xB, col: yB } = labelToIndex(b)!
 
-    return this.getAdjacentLabel(label1, label2, direction)
+      return xA - xB || yA - yB
+    })
+
+    return direction === DIRECTION.LEFT
+      ? labelArray[0]
+      : labelArray[labelArray.length - 1]
   }
 
   private getAdjacentLabel(

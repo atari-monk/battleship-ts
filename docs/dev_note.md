@@ -54,7 +54,3 @@ Cell is converted to index based cords.
 Cell left or right to it is selected.  
 Cell is converted to label based cords.  
 Shot is added to taken shots.
-
-## Debuging
-
-getLabelsFromSet should return end of ship.
