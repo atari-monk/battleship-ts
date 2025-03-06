@@ -1,24 +1,38 @@
 # Ship Orientation Strategy
 
-Overview:  
-After first hit on a ship, strategy is swiched to 'Ship Orientation Strategy'.  
-This is focused on finding cell next to first hit, thereby allowing to detect ship orientation.  
-Knowing if it is horizontal or vertical allows better targeting.
+```plaintext
+battleship-ts/
+└── libs/
+    └── battleship/
+        └── ai/
+            └── strategy/
+                └── ShipOrientationStrategy.ts
+```
 
-Algoritm step by step goes:  
-We get hit ship data to help targeting.  
-We take hit cell to determine next move.  
-We randomly select orientation.  
-If we checked left and right already, we switch orientation to vertical.  
-If we checked up and down already, we switch orientation to horizontal.
+The `ShipOrientationStrategy` class is responsible for detecting orientation of ship that was hit once.
 
-If the orientation is set to horizontal.  
-We toss a coin, if true, we go left relative to first hit cell.  
-We set index coords of this and store left in Set of checked directions.  
-If coint toss was false, we do same for right.
+Implements `IStrategy` interface.
 
-This is done also for vertical orientation and up down direction.  
-This produces hits to cells next to original hit.  
-To get another hit needed to establish ship orientation.
+## **Dependencies**
+- **`BattleshipAI`**: Uses the `getHitShip()` method to get the currently targeted ship.
+- **`getRandomOrientation()`**: Utility function to randomly determine ship orientation (horizontal or vertical).
+- **`coinToss()`**: Utility function to make random decisions for direction.
+- **`Orientation`, `ShipOrientation`, `DIRECTION`**: Enum values representing orientation and direction of attack.
+- **`indexToLabel()`, `labelToIndex()`**: Utility functions for converting between coordinate indices and labels.
 
-After second hit, method updateState has info to determine orientation.
+## **Attack Method Behavior**
+1. Identifies the currently targeted ship based on previous hits.
+2. Determines the next shot based on the ship’s current hit.
+3. Randomly adjusts the shot orientation and direction, ensuring not to shoot in already-visited directions.
+4. Returns the shot along with a log message indicating whether it was a hit or miss, and the ship’s orientation.
+
+## **Update State Method**
+1. After the second hit on a ship, determines its orientation (horizontal or vertical).
+2. If two hits are in the same row, the ship is considered horizontal; if in the same column, vertical.
+3. Resets direction counters for next use.
+
+## **Test Case**
+- **Scenario:** A ship with one hit, its orientation not yet determined.
+- **Objective:** Verify that `ShipOrientationStrategy` correctly identifies the ship’s orientation.
+
+---
