@@ -6,6 +6,7 @@ import { PLAYER_TYPE } from './type/PLAYER_TYPE'
 import { bigStyle } from './render'
 import { GameConfig } from './type/GameConfig'
 import { PlayerConfig } from './type/PlayerConfig'
+import { tests } from './tests'
 
 export function generateGrid(fleetType: FLEET_TYPE) {
   const grid = new BattleshipGrid()
@@ -14,7 +15,7 @@ export function generateGrid(fleetType: FLEET_TYPE) {
       grid.placeFleet()
       break
     case FLEET_TYPE.STATIC:
-      grid.placeShipsFromArray()
+      grid.placeShipsFromArray(tests.test3.grid)
       break
     default:
       grid.placeFleet()

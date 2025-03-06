@@ -25,5 +25,3 @@ Implements IStrategy interface.
 ## **Test Case**
 - **Scenario:** A `Range` of 6 cells, with a 4-cell horizontal ship.  
 - **Objective:** Verify that `RandomStrategy` does not repeat shots and correctly logs attack results.
-
----

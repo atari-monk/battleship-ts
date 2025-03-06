@@ -34,5 +34,3 @@ Implements `IStrategy` interface.
 ## **Test Case**
 - **Scenario:** A ship with one hit, its orientation not yet determined.
 - **Objective:** Verify that `ShipOrientationStrategy` correctly identifies the ship’s orientation.
-
----

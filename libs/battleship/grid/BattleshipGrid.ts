@@ -211,20 +211,7 @@ export class BattleshipGrid {
     }
   }
 
-  public placeShipsFromArray(): boolean {
-    const shipGrid = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    ]
-
+  public placeShipsFromArray(shipGrid: number[][]): boolean {
     if (shipGrid.length !== this.rows || shipGrid[0].length !== this.cols) {
       console.error('The grid must be 10x10.')
       return false
