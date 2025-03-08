@@ -1,17 +1,10 @@
-## Log
+# battleship-ts
 
-### 2025
-
-#### Task
-
-- [02](./docs/log/2025/task/02.md)
-- [03](./docs/log/2025/task/03.md)
-
-#### Time
-
-- [02](./docs/log/2025/time/02_out.json)
-- [03](./docs/log/2025/time/03_out.json)
+Classic Battleship game in typescript.  
+[Project Log](docs/index.md)
 
 ## Doc
 
-- [Project Configuration](./docs/project_configuration.md)
+- [Project Configuration](docs/note/project_configuration.md)
+- [File System Notation](docs/note/note_folders.md)
+- [AI](docs/ai/index.md)
