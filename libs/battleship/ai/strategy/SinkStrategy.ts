@@ -1,11 +1,12 @@
-import { BattleshipAI } from '../BattleshipAI'
-import { IStrategy } from '../type/IStrategy'
-import { Range } from '../../grid/type/Range'
-import { AttackResult } from '../type/AttackResult'
-import { DIRECTION } from '../type/DIRECTION'
-import { ShipOrientation } from '../type/Orientation'
-import { coinToss } from '../../util/random'
-import { indexToLabel, labelToIndex } from '../../util/grid'
+import {BattleshipAI} from '../BattleshipAI'
+import {IStrategy} from '../type/IStrategy'
+import {Range} from '../../grid/type/Range'
+import {AttackResult} from '../type/AttackResult'
+import {DIRECTION} from '../type/DIRECTION'
+import {ShipOrientation} from '../type/Orientation'
+import {coinToss} from '../../util/random'
+import {indexToLabel, labelToIndex} from '../../util/grid'
+import {ShipTarget} from '../type/ShipTarget'
 
 export class SinkStrategy implements IStrategy {
   private _ai
@@ -33,7 +34,7 @@ export class SinkStrategy implements IStrategy {
     }
 
     const cellIndex = labelToIndex(cell)!
-    let shotIndex = { row: cellIndex.row, col: cellIndex.col }
+    let shotIndex = {row: cellIndex.row, col: cellIndex.col}
 
     if (target.orientation === ShipOrientation.Horizontal) {
       if (direction === DIRECTION.LEFT) shotIndex.col--
@@ -44,6 +45,10 @@ export class SinkStrategy implements IStrategy {
     }
 
     shot = indexToLabel(shotIndex.row, shotIndex.col)!
+
+    if (this.isShipSunk(target)) {
+      target.isSunk = true
+    }
 
     this._ai.shotsTaken.add(shot)
     return {
@@ -64,8 +69,8 @@ export class SinkStrategy implements IStrategy {
 
     const labelArray = Array.from(labels)
     labelArray.sort((a, b) => {
-      const { row: xA, col: yA } = labelToIndex(a)!
-      const { row: xB, col: yB } = labelToIndex(b)!
+      const {row: xA, col: yA} = labelToIndex(a)!
+      const {row: xB, col: yB} = labelToIndex(b)!
       return orientation === ShipOrientation.Horizontal ? yA - yB : xA - xB
     })
 
@@ -93,5 +98,35 @@ export class SinkStrategy implements IStrategy {
       case DIRECTION.DOWN:
         return DIRECTION.UP
     }
+  }
+
+  private isShipSunk(ship: ShipTarget): boolean {
+    if (ship.orientation === ShipOrientation.Horizontal) {
+      const leftCell = Array.from(ship.hits)[0]
+      const rightCell = Array.from(ship.hits)[ship.hits.size - 1]
+      const leftMiss = this._ai.enemyGrid.isMissNextTo(leftCell, DIRECTION.LEFT)
+      const rightMiss = this._ai.enemyGrid.isMissNextTo(
+        rightCell,
+        DIRECTION.RIGHT
+      )
+
+      if (leftMiss && rightMiss) {
+        return true
+      }
+    } else if (ship.orientation === ShipOrientation.Vertical) {
+      const topCell = Array.from(ship.hits)[0]
+      const bottomCell = Array.from(ship.hits)[ship.hits.size - 1]
+      const topMiss = this._ai.enemyGrid.isMissNextTo(topCell, DIRECTION.UP)
+      const bottomMiss = this._ai.enemyGrid.isMissNextTo(
+        bottomCell,
+        DIRECTION.DOWN
+      )
+
+      if (topMiss && bottomMiss) {
+        return true
+      }
+    }
+
+    return false
   }
 }
