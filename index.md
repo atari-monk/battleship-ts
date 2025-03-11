@@ -1,7 +1,4 @@
-# battleship-ts
-
 Classic Battleship game in typescript.  
-[Project Log](docs/index.md)
 
 ## Doc
 
