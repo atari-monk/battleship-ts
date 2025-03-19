@@ -23,6 +23,6 @@
     "vite": "^6.2.0"
   },
   "dependencies": {
-    "@atari-monk/event-emitter": "^1.0.0"
+    "@atari-monk/event-emitter": "^1.0.1"
   }
 }

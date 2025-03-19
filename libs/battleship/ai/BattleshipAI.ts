@@ -1,8 +1,10 @@
-import { BattleshipGrid } from '../grid/BattleshipGrid'
-import { Range } from '../grid/type/Range'
-import { ShipTarget } from './type/ShipTarget'
-import { ShipTracker } from './ShipTracker'
-import { StateMachine } from './StateMachine'
+import {BattleshipGrid} from '../grid/BattleshipGrid'
+import {Range} from '../grid/type/Range'
+import {ShipTarget} from './type/ShipTarget'
+import {ShipTracker} from './ShipTracker'
+import {StateMachine} from './StateMachine'
+import {EventEmitter} from '@atari-monk/event-emitter'
+import {StateEvents} from '../events/events'
 
 export class BattleshipAI {
   public enemyGrid: BattleshipGrid
@@ -10,11 +12,14 @@ export class BattleshipAI {
   private stateMachine: StateMachine
   private shipTracker: ShipTracker
 
-  constructor(enemyGrid: BattleshipGrid) {
+  constructor(
+    enemyGrid: BattleshipGrid,
+    eventEmitter: EventEmitter<StateEvents>
+  ) {
     this.enemyGrid = enemyGrid
     this.shipTracker = new ShipTracker()
     this.shotsTaken = new Set()
-    this.stateMachine = new StateMachine(this)
+    this.stateMachine = new StateMachine(this, eventEmitter)
   }
 
   public aiMove(
@@ -27,7 +32,7 @@ export class BattleshipAI {
   ) {
     this.stateMachine.transition(this)
     const strategy = this.stateMachine.getStrategy()
-    const { shot, log } = strategy.attack(range)
+    const {shot, log} = strategy.attack(range)
     const result = this.enemyGrid.hitCell(shot)
     if (result.shipHit) this.shipTracker.handleShot(shot)
     strategy.updateState()
