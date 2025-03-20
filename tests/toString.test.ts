@@ -1,4 +1,4 @@
-import { BattleshipGrid } from '../libs/battleship/BattleshipGrid'
+import {BattleshipGrid} from '../libs/battleship'
 
 describe('BattleshipGrid toString', () => {
   test('toString should return a string representation of the grid', () => {

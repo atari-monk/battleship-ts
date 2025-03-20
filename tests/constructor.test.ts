@@ -1,4 +1,4 @@
-import { BattleshipGrid } from '../libs/battleship/BattleshipGrid'
+import { BattleshipGrid } from '../libs/battleship'
 
 describe('BattleshipGrid constructor', () => {
   test('should initialize a 10x10 grid by default', () => {

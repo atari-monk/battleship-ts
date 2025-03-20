@@ -1,4 +1,4 @@
-import { BattleshipGrid } from '../libs/battleship/BattleshipGrid'
+import { BattleshipGrid } from '../libs/battleship'
 
 describe('BattleshipGrid Fleet', () => {
   test('Fleet should be placed with correct ship count', () => {
