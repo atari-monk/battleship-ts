@@ -60,6 +60,14 @@ export class SinkStrategy implements IStrategy {
 
   updateState(): void {}
 
+  public test_getLabelsFromSet(
+    labels: Set<string>,
+    direction: DIRECTION,
+    orientation: ShipOrientation
+  ): string | null {
+    return this.getLabelsFromSet(labels, direction, orientation)
+  }
+
   private getLabelsFromSet(
     labels: Set<string>,
     direction: DIRECTION,
