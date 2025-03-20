@@ -2,7 +2,7 @@ import {SinkStrategy} from '../libs/battleship/ai/strategy/SinkStrategy'
 import {DIRECTION} from '../libs/battleship/ai/type/DIRECTION'
 import {ShipOrientation} from '../libs/battleship/ai/type/Orientation'
 
-jest.mock('../libs/util/grid', () => ({
+jest.mock('../libs/battleship', () => ({
   labelToIndex: jest.fn((label: string) => {
     const mapping: Record<string, {row: number; col: number}> = {
       C5: {row: 2, col: 5},
@@ -22,7 +22,7 @@ describe('SinkStrategy - test_getLabelsFromSet', () => {
   })
 
   it('should return the leftmost label when direction is LEFT and orientation is Horizontal', () => {
-    const labels = new Set(['C5', 'D5', 'E5', 'F5'])
+    const labels = new Set(['D5', 'F5', 'E5', 'C5'])
     const result = strategy.test_getLabelsFromSet(
       labels,
       DIRECTION.LEFT,
@@ -32,7 +32,7 @@ describe('SinkStrategy - test_getLabelsFromSet', () => {
   })
 
   it('should return the rightmost label when direction is RIGHT and orientation is Horizontal', () => {
-    const labels = new Set(['C5', 'D5', 'E5', 'F5'])
+    const labels = new Set(['D5', 'F5', 'E5', 'C5'])
     const result = strategy.test_getLabelsFromSet(
       labels,
       DIRECTION.RIGHT,

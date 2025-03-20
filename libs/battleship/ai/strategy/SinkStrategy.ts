@@ -5,7 +5,7 @@ import {AttackResult} from '../type/AttackResult'
 import {DIRECTION} from '../type/DIRECTION'
 import {ShipOrientation} from '../type/Orientation'
 import {coinToss} from '../../util/random'
-import {indexToLabel, labelToIndex} from '../../util/grid'
+import {indexToLabel, labelToIndex, sortLabels} from '../../util/grid'
 import {ShipTarget} from '../type/ShipTarget'
 
 export class SinkStrategy implements IStrategy {
@@ -75,16 +75,10 @@ export class SinkStrategy implements IStrategy {
   ): string | null {
     if (labels.size === 0) return null
 
-    const labelArray = Array.from(labels)
-    labelArray.sort((a, b) => {
-      const {row: xA, col: yA} = labelToIndex(a)!
-      const {row: xB, col: yB} = labelToIndex(b)!
-      return orientation === ShipOrientation.Horizontal ? yA - yB : xA - xB
-    })
-
+    const sortedLabels = sortLabels(labels, orientation)
     return direction === DIRECTION.LEFT || direction === DIRECTION.UP
-      ? labelArray[0]
-      : labelArray[labelArray.length - 1]
+      ? sortedLabels[0]
+      : sortedLabels[sortedLabels.length - 1]
   }
 
   private getRandomDirection(orientation: ShipOrientation): DIRECTION {
@@ -109,9 +103,11 @@ export class SinkStrategy implements IStrategy {
   }
 
   private isShipSunk(ship: ShipTarget): boolean {
+    const sortedHits = sortLabels(ship.hits, ship.orientation)
+
     if (ship.orientation === ShipOrientation.Horizontal) {
-      const leftCell = Array.from(ship.hits)[0]
-      const rightCell = Array.from(ship.hits)[ship.hits.size - 1]
+      const leftCell = sortedHits[0]
+      const rightCell = sortedHits[sortedHits.length - 1]
       const leftMiss = this._ai.enemyGrid.isMissNextTo(leftCell, DIRECTION.LEFT)
       const rightMiss = this._ai.enemyGrid.isMissNextTo(
         rightCell,
@@ -122,8 +118,8 @@ export class SinkStrategy implements IStrategy {
         return true
       }
     } else if (ship.orientation === ShipOrientation.Vertical) {
-      const topCell = Array.from(ship.hits)[0]
-      const bottomCell = Array.from(ship.hits)[ship.hits.size - 1]
+      const topCell = sortedHits[0]
+      const bottomCell = sortedHits[sortedHits.length - 1]
       const topMiss = this._ai.enemyGrid.isMissNextTo(topCell, DIRECTION.UP)
       const bottomMiss = this._ai.enemyGrid.isMissNextTo(
         bottomCell,

@@ -1,4 +1,5 @@
-import { Range } from '../grid/type/Range'
+import {ShipOrientation} from '../ai/type/Orientation'
+import {Range} from '../grid/type/Range'
 
 export function getRandomCell(range: Range): string {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -21,14 +22,14 @@ export function labelToIndex(
   label: string,
   rows: number = 10,
   cols: number = 10
-): { row: number; col: number } | null {
+): {row: number; col: number} | null {
   const match = label.match(/^([A-J])(\d{1,2})$/i)
   if (!match) return null
 
   const col = match[1].toUpperCase().charCodeAt(0) - 65
   const row = parseInt(match[2], 10) - 1
 
-  return row >= 0 && row < rows && col >= 0 && col < cols ? { row, col } : null
+  return row >= 0 && row < rows && col >= 0 && col < cols ? {row, col} : null
 }
 
 export function indexToLabel(
@@ -44,3 +45,19 @@ export function indexToLabel(
 
   return `${letter}${number}`
 }
+
+export function sortLabels(
+  labels: Set<string>,
+  orientation: ShipOrientation
+): string[] {
+  const labelArray = Array.from(labels)
+  labelArray.sort((a, b) => {
+    const {row: rowA, col: colA} = labelToIndex(a)!
+    const {row: rowB, col: colB} = labelToIndex(b)!
+    return orientation === ShipOrientation.Horizontal
+      ? colA - colB
+      : rowA - rowB
+  })
+  return labelArray
+}
+
