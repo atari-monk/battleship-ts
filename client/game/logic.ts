@@ -30,7 +30,7 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
       hitResult = grid.hitCell(shot)
       console.log(`${attackerName}:`, shot, hitResult.shipHit ? 'hit' : 'miss')
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      hitResult = ai.aiMove(tests.test3.range)
+      hitResult = ai.aiMove(tests.test4.range)
       console.log(hitResult.log!(hitResult.shipHit))
     }
 

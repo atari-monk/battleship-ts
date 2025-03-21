@@ -21,7 +21,7 @@ export function generateGrid(fleetType: FLEET_TYPE) {
       grid.placeFleet()
       break
     case FLEET_TYPE.STATIC:
-      grid.placeShipsFromArray(tests.test3.grid)
+      grid.placeShipsFromArray(tests.test4.grid)
       break
     default:
       grid.placeFleet()
