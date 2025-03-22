@@ -1,12 +1,13 @@
-import { DIRECTION } from '../ai/type/DIRECTION'
-import { labelToIndex } from '../util/grid'
-import { GridCell } from './type/GridCell'
-import { HitResult } from './type/HitResult'
+import {DIRECTION} from '../ai/type/DIRECTION'
+import {labelToIndex} from '../util/grid'
+import {GridCell} from './type/GridCell'
+import {HitResult} from './type/HitResult'
+import {FleetPlacer} from './FleetPlacer'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
 
-  private shipTypes: { [key: number]: string } = {
+  private shipTypes: {[key: number]: string} = {
     1: 'C',
     2: 'B',
     3: 'D',
@@ -25,7 +26,7 @@ export class BattleshipGrid {
   public toString(hideShips = false): string {
     const columnLabels =
       '   ' +
-      Array.from({ length: this.cols }, (_, i) =>
+      Array.from({length: this.cols}, (_, i) =>
         String.fromCharCode(65 + i)
       ).join(' ')
 
@@ -35,7 +36,7 @@ export class BattleshipGrid {
           (rowIndex + 1).toString().padStart(2, ' ') +
           ' ' +
           row
-            .map((cell) =>
+            .map(cell =>
               cell.isHit
                 ? cell.shipId !== undefined
                   ? 'X'
@@ -54,8 +55,8 @@ export class BattleshipGrid {
   }
 
   public isGameOver(): boolean {
-    return this._grid.every((row) =>
-      row.every((cell) => cell.shipId === undefined || cell.isHit)
+    return this._grid.every(row =>
+      row.every(cell => cell.shipId === undefined || cell.isHit)
     )
   }
 
@@ -63,7 +64,7 @@ export class BattleshipGrid {
     const position = labelToIndex(label, this.rows, this.cols)
     if (!position) throw new Error('labelToIndex fail')
 
-    const { row, col } = position
+    const {row, col} = position
 
     if (this._grid[row][col].isHit) {
       return {
@@ -86,7 +87,7 @@ export class BattleshipGrid {
     const position = labelToIndex(label, this.rows, this.cols)
     if (!position) return false
 
-    let { row, col } = position
+    let {row, col} = position
 
     if (direction === DIRECTION.LEFT) col -= 1
     if (direction === DIRECTION.RIGHT) col += 1
@@ -101,114 +102,16 @@ export class BattleshipGrid {
   }
 
   private generateGrid(): GridCell[][] {
-    return Array.from({ length: this.rows }, () =>
-      Array.from({ length: this.cols }, () => ({
+    return Array.from({length: this.rows}, () =>
+      Array.from({length: this.cols}, () => ({
         isHit: false,
       }))
     )
   }
 
   public placeFleet(enforceSpacing: boolean = true): boolean {
-    const ships = [5, 4, 3, 3, 2]
-    let shipId = 1
-
-    for (const shipSize of ships) {
-      let placed = false
-      let attempts = 0
-
-      while (!placed && attempts < 100) {
-        const orientation = Math.random() < 0.5 ? 'H' : 'V'
-        const maxRow = orientation === 'V' ? this.rows - shipSize : this.rows
-        const maxCol = orientation === 'H' ? this.cols - shipSize : this.cols
-        const row = Math.floor(Math.random() * maxRow)
-        const col = Math.floor(Math.random() * maxCol)
-
-        if (
-          this.canPlaceShip(
-            row,
-            col,
-            orientation as 'H' | 'V',
-            shipSize,
-            enforceSpacing
-          )
-        ) {
-          this.placeShip(row, col, orientation as 'H' | 'V', shipSize, shipId)
-          placed = true
-        }
-        attempts++
-      }
-
-      if (!placed) {
-        console.error(
-          `Failed to place ship of size ${shipSize} after 100 attempts.`
-        )
-        return false
-      }
-      shipId++
-    }
-    return true
-  }
-
-  private canPlaceShip(
-    row: number,
-    col: number,
-    orientation: 'H' | 'V',
-    size: number,
-    enforceSpacing: boolean
-  ): boolean {
-    const coords: { row: number; col: number }[] = []
-
-    if (orientation === 'H') {
-      if (col + size > this.cols) return false
-      for (let i = 0; i < size; i++) {
-        coords.push({ row, col: col + i })
-      }
-    } else {
-      if (row + size > this.rows) return false
-      for (let i = 0; i < size; i++) {
-        coords.push({ row: row + i, col })
-      }
-    }
-
-    for (const { row, col } of coords) {
-      if (this._grid[row][col].shipId !== undefined) {
-        return false
-      }
-    }
-
-    if (enforceSpacing) {
-      for (const { row: r, col: c } of coords) {
-        for (let i = r - 1; i <= r + 1; i++) {
-          for (let j = c - 1; j <= c + 1; j++) {
-            if (i >= 0 && i < this.rows && j >= 0 && j < this.cols) {
-              if (this._grid[i][j].shipId !== undefined) {
-                return false
-              }
-            }
-          }
-        }
-      }
-    }
-
-    return true
-  }
-
-  private placeShip(
-    row: number,
-    col: number,
-    orientation: 'H' | 'V',
-    size: number,
-    shipId: number
-  ): void {
-    if (orientation === 'H') {
-      for (let i = 0; i < size; i++) {
-        this._grid[row][col + i].shipId = shipId
-      }
-    } else {
-      for (let i = 0; i < size; i++) {
-        this._grid[row + i][col].shipId = shipId
-      }
-    }
+    const fleetPlacer = new FleetPlacer(this._grid, this.rows, this.cols)
+    return fleetPlacer.placeFleet(enforceSpacing)
   }
 
   public placeShipsFromArray(shipGrid: number[][]): boolean {
