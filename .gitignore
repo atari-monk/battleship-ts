@@ -2,3 +2,5 @@ node_modules
 dist
 script/data
 prompt.md
+merge.md
+merge.txt
