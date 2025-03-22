@@ -3,24 +3,27 @@ import {labelToIndex} from '../util/grid'
 import {GridCell} from './type/GridCell'
 import {HitResult} from './type/HitResult'
 import {FleetPlacer} from './FleetPlacer'
+import {Ship} from './type/Ship'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
+  private fleetPlacer: FleetPlacer
 
-  private shipTypes: {[key: number]: string} = {
-    1: 'C',
-    2: 'B',
-    3: 'D',
-    4: 'S',
-    5: 'P',
+  private ships: Ship[] = [
+    {id: 1, size: 5, type: 'C'},
+    {id: 2, size: 4, type: 'B'},
+    {id: 3, size: 3, type: 'D'},
+    {id: 4, size: 3, type: 'S'},
+    {id: 5, size: 2, type: 'P'},
+  ]
+
+  constructor(public rows: number = 10, public cols: number = 10) {
+    this._grid = this.generateGrid()
+    this.fleetPlacer = new FleetPlacer(this._grid, this.rows, this.cols)
   }
 
   get grid(): GridCell[][] {
     return this._grid
-  }
-
-  constructor(public rows: number = 10, public cols: number = 10) {
-    this._grid = this.generateGrid()
   }
 
   public toString(hideShips = false): string {
@@ -44,7 +47,7 @@ export class BattleshipGrid {
                 : cell.shipId !== undefined
                 ? hideShips
                   ? '-'
-                  : this.shipTypes[cell.shipId] || '?'
+                  : this.getShipType(cell.shipId) || '?'
                 : '-'
             )
             .join(' ')
@@ -52,6 +55,11 @@ export class BattleshipGrid {
       .join('\n')
 
     return columnLabels + '\n' + gridRows
+  }
+
+  private getShipType(shipId: number): string {
+    const ship = this.ships.find(s => s.id === shipId)
+    return ship ? ship.type : '?'
   }
 
   public isGameOver(): boolean {
@@ -101,17 +109,16 @@ export class BattleshipGrid {
     )
   }
 
+  public placeFleet(enforceSpacing: boolean = true): boolean {
+    return this.fleetPlacer.placeFleet(this.ships, enforceSpacing)
+  }
+
   private generateGrid(): GridCell[][] {
     return Array.from({length: this.rows}, () =>
       Array.from({length: this.cols}, () => ({
         isHit: false,
       }))
     )
-  }
-
-  public placeFleet(enforceSpacing: boolean = true): boolean {
-    const fleetPlacer = new FleetPlacer(this._grid, this.rows, this.cols)
-    return fleetPlacer.placeFleet(enforceSpacing)
   }
 
   public placeShipsFromArray(shipGrid: number[][]): boolean {
