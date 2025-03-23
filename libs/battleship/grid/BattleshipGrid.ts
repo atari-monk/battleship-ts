@@ -2,31 +2,34 @@ import {DIRECTION} from '../ai/type/DIRECTION'
 import {labelToIndex} from '../util/grid'
 import {GridCell} from './type/GridCell'
 import {HitResult} from './type/HitResult'
+import {IFleetPlacer} from './type/IFleetPlacer'
 import {FleetPlacer} from './FleetPlacer'
 import {Ship} from './type/Ship'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
-  private fleetPlacer: FleetPlacer
-
-  private ships: Ship[] = [
-    {id: 1, size: 5, type: 'C'},
-    {id: 2, size: 4, type: 'B'},
-    {id: 3, size: 3, type: 'D'},
-    {id: 4, size: 3, type: 'S'},
-    {id: 5, size: 2, type: 'P'},
-  ]
-
-  constructor(public rows: number = 10, public cols: number = 10) {
-    this._grid = this.generateGrid()
-    this.fleetPlacer = new FleetPlacer(this._grid, this.rows, this.cols)
-  }
+  private ships: Ship[]
 
   get grid(): GridCell[][] {
     return this._grid
   }
 
-  public toString(hideShips = false): string {
+  constructor(
+    public rows: number = 10,
+    public cols: number = 10,
+    private fleetPlacer: IFleetPlacer = new FleetPlacer()
+  ) {
+    this._grid = this.generateGrid()
+    this.ships = [
+      {id: 1, size: 5, type: 'C'},
+      {id: 2, size: 4, type: 'B'},
+      {id: 3, size: 3, type: 'D'},
+      {id: 4, size: 3, type: 'S'},
+      {id: 5, size: 2, type: 'P'},
+    ]
+  }
+
+  public render(hideShips: boolean = false): string {
     const columnLabels =
       '   ' +
       Array.from({length: this.cols}, (_, i) =>
@@ -34,27 +37,25 @@ export class BattleshipGrid {
       ).join(' ')
 
     const gridRows = this._grid
-      .map(
-        (row, rowIndex) =>
-          (rowIndex + 1).toString().padStart(2, ' ') +
-          ' ' +
-          row
-            .map(cell =>
-              cell.isHit
-                ? cell.shipId !== undefined
-                  ? 'X'
-                  : 'O'
-                : cell.shipId !== undefined
-                ? hideShips
-                  ? '-'
-                  : this.getShipType(cell.shipId) || '?'
-                : '-'
-            )
-            .join(' ')
-      )
+      .map((row, rowIndex) => {
+        const rowLabel = (rowIndex + 1).toString().padStart(2, ' ')
+        const cells = row
+          .map(cell => {
+            if (cell.isHit) {
+              return cell.shipId ? 'X' : 'O'
+            }
+            return cell.shipId
+              ? hideShips
+                ? '-'
+                : this.getShipType(cell.shipId)
+              : '-'
+          })
+          .join(' ')
+        return `${rowLabel} ${cells}`
+      })
       .join('\n')
 
-    return columnLabels + '\n' + gridRows
+    return `${columnLabels}\n${gridRows}`
   }
 
   private getShipType(shipId: number): string {
@@ -70,24 +71,25 @@ export class BattleshipGrid {
 
   public hitCell(label: string): HitResult {
     const position = labelToIndex(label, this.rows, this.cols)
-    if (!position) throw new Error('labelToIndex fail')
+    if (!position) throw new Error('Invalid label provided')
 
     const {row, col} = position
+    const cell = this._grid[row][col]
 
-    if (this._grid[row][col].isHit) {
+    if (cell.isHit) {
       return {
-        label: label,
+        label,
         alreadyHit: true,
         shipHit: false,
       }
     }
 
-    this._grid[row][col].isHit = true
+    cell.isHit = true
 
     return {
-      label: label,
+      label,
       alreadyHit: false,
-      shipHit: this._grid[row][col].shipId !== undefined,
+      shipHit: !!cell.shipId,
     }
   }
 
@@ -97,27 +99,34 @@ export class BattleshipGrid {
 
     let {row, col} = position
 
-    if (direction === DIRECTION.LEFT) col -= 1
-    if (direction === DIRECTION.RIGHT) col += 1
-    if (direction === DIRECTION.UP) row -= 1
-    if (direction === DIRECTION.DOWN) row += 1
+    switch (direction) {
+      case DIRECTION.LEFT:
+        col--
+        break
+      case DIRECTION.RIGHT:
+        col++
+        break
+      case DIRECTION.UP:
+        row--
+        break
+      case DIRECTION.DOWN:
+        row++
+        break
+    }
 
     if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return false
 
-    return (
-      this._grid[row][col].isHit && this._grid[row][col].shipId === undefined
-    )
+    const cell = this._grid[row][col]
+    return cell.isHit && !cell.shipId
   }
 
   public placeFleet(enforceSpacing: boolean = true): boolean {
-    return this.fleetPlacer.placeFleet(this.ships, enforceSpacing)
-  }
-
-  private generateGrid(): GridCell[][] {
-    return Array.from({length: this.rows}, () =>
-      Array.from({length: this.cols}, () => ({
-        isHit: false,
-      }))
+    return this.fleetPlacer.placeFleet(
+      this.ships,
+      this._grid,
+      this.rows,
+      this.cols,
+      enforceSpacing
     )
   }
 
@@ -130,14 +139,21 @@ export class BattleshipGrid {
     let shipId = 1
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
-        if (shipGrid[row][col] === 1) {
-          if (this._grid[row][col].shipId === undefined) {
-            this._grid[row][col].shipId = shipId
-          }
+        if (
+          shipGrid[row][col] === 1 &&
+          this._grid[row][col].shipId === undefined
+        ) {
+          this._grid[row][col].shipId = shipId
         }
       }
     }
 
     return true
+  }
+
+  private generateGrid(): GridCell[][] {
+    return Array.from({length: this.rows}, () =>
+      Array.from({length: this.cols}, () => ({isHit: false}))
+    )
   }
 }

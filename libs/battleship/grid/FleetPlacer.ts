@@ -1,29 +1,39 @@
 import {GridCell} from './type/GridCell'
 import {Ship} from './type/Ship'
+import {IFleetPlacer} from './type/IFleetPlacer'
 
-export class FleetPlacer {
-  constructor(
-    private grid: GridCell[][],
-    private rows: number,
-    private cols: number
-  ) {}
-
-  public placeFleet(ships: Ship[], enforceSpacing: boolean = true): boolean {
+export class FleetPlacer implements IFleetPlacer {
+  public placeFleet(
+    ships: Ship[],
+    grid: GridCell[][],
+    rows: number,
+    cols: number,
+    enforceSpacing: boolean = true
+  ): boolean {
     for (const ship of ships) {
       let placed = false
       let attempts = 0
 
       while (!placed && attempts < 100) {
         const orientation = Math.random() < 0.5 ? 'H' : 'V'
-        const maxRow = orientation === 'V' ? this.rows - ship.size : this.rows
-        const maxCol = orientation === 'H' ? this.cols - ship.size : this.cols
+        const maxRow = orientation === 'V' ? rows - ship.size : rows
+        const maxCol = orientation === 'H' ? cols - ship.size : cols
         const row = Math.floor(Math.random() * maxRow)
         const col = Math.floor(Math.random() * maxCol)
 
         if (
-          this.canPlaceShip(row, col, orientation, ship.size, enforceSpacing)
+          this.canPlaceShip(
+            row,
+            col,
+            orientation,
+            ship.size,
+            grid,
+            rows,
+            cols,
+            enforceSpacing
+          )
         ) {
-          this.placeShip(row, col, orientation, ship)
+          this.placeShip(row, col, orientation, ship, grid)
           placed = true
         }
         attempts++
@@ -44,39 +54,47 @@ export class FleetPlacer {
     col: number,
     orientation: 'H' | 'V',
     size: number,
+    grid: GridCell[][],
+    rows: number,
+    cols: number,
     enforceSpacing: boolean
   ): boolean {
     const coords: {row: number; col: number}[] = []
 
     if (orientation === 'H') {
-      if (col + size > this.cols) return false
+      if (col + size > cols) return false
       for (let i = 0; i < size; i++) {
         coords.push({row, col: col + i})
       }
     } else {
-      if (row + size > this.rows) return false
+      if (row + size > rows) return false
       for (let i = 0; i < size; i++) {
         coords.push({row: row + i, col})
       }
     }
 
-    return this.isValidPlacement(coords, enforceSpacing)
+    return this.isValidPlacement(coords, grid, rows, cols, enforceSpacing)
   }
 
   private isValidPlacement(
     coords: {row: number; col: number}[],
+    grid: GridCell[][],
+    rows: number,
+    cols: number,
     enforceSpacing: boolean
   ): boolean {
+    // Check if cells are already occupied.
     for (const {row, col} of coords) {
-      if (this.grid[row][col].shipId !== undefined) return false
+      if (grid[row][col].shipId !== undefined) return false
     }
 
+    // Optionally enforce spacing around the ship.
     if (enforceSpacing) {
-      for (const {row: r, col: c} of coords) {
-        for (let i = r - 1; i <= r + 1; i++) {
-          for (let j = c - 1; j <= c + 1; j++) {
-            if (i >= 0 && i < this.rows && j >= 0 && j < this.cols) {
-              if (this.grid[i][j].shipId !== undefined) return false
+      for (const {row, col} of coords) {
+        for (let i = row - 1; i <= row + 1; i++) {
+          for (let j = col - 1; j <= col + 1; j++) {
+            if (i >= 0 && i < rows && j >= 0 && j < cols) {
+              if (grid[i][j].shipId !== undefined) return false
             }
           }
         }
@@ -90,15 +108,16 @@ export class FleetPlacer {
     row: number,
     col: number,
     orientation: 'H' | 'V',
-    ship: Ship
+    ship: Ship,
+    grid: GridCell[][]
   ): void {
     if (orientation === 'H') {
       for (let i = 0; i < ship.size; i++) {
-        this.grid[row][col + i].shipId = ship.id
+        grid[row][col + i].shipId = ship.id
       }
     } else {
       for (let i = 0; i < ship.size; i++) {
-        this.grid[row + i][col].shipId = ship.id
+        grid[row + i][col].shipId = ship.id
       }
     }
   }
