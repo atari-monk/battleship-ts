@@ -1,3 +1,3 @@
-import { startGame } from './game/loop'
+import {startGame} from './game/loop'
 
 await startGame()

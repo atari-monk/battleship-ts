@@ -29,36 +29,7 @@ export class BattleshipGrid {
     ]
   }
 
-  public render(hideShips: boolean = false): string {
-    const columnLabels =
-      '   ' +
-      Array.from({length: this.cols}, (_, i) =>
-        String.fromCharCode(65 + i)
-      ).join(' ')
-
-    const gridRows = this._grid
-      .map((row, rowIndex) => {
-        const rowLabel = (rowIndex + 1).toString().padStart(2, ' ')
-        const cells = row
-          .map(cell => {
-            if (cell.isHit) {
-              return cell.shipId ? 'X' : 'O'
-            }
-            return cell.shipId
-              ? hideShips
-                ? '-'
-                : this.getShipType(cell.shipId)
-              : '-'
-          })
-          .join(' ')
-        return `${rowLabel} ${cells}`
-      })
-      .join('\n')
-
-    return `${columnLabels}\n${gridRows}`
-  }
-
-  private getShipType(shipId: number): string {
+  public getShipType(shipId: number): string {
     const ship = this.ships.find(s => s.id === shipId)
     return ship ? ship.type : '?'
   }
