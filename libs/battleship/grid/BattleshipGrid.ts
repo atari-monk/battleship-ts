@@ -5,6 +5,7 @@ import {HitResult} from './type/HitResult'
 import {IFleetPlacer} from './type/IFleetPlacer'
 import {FleetPlacer} from './FleetPlacer'
 import {Ship} from './type/Ship'
+import {ShipPlacer} from './ShipPlacer'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
@@ -102,24 +103,12 @@ export class BattleshipGrid {
   }
 
   public placeShipsFromArray(shipGrid: number[][]): boolean {
-    if (shipGrid.length !== this.rows || shipGrid[0].length !== this.cols) {
-      console.error('The grid must be 10x10.')
-      return false
-    }
-
-    let shipId = 1
-    for (let row = 0; row < this.rows; row++) {
-      for (let col = 0; col < this.cols; col++) {
-        if (
-          shipGrid[row][col] === 1 &&
-          this._grid[row][col].shipId === undefined
-        ) {
-          this._grid[row][col].shipId = shipId
-        }
-      }
-    }
-
-    return true
+    return ShipPlacer.placeShipsFromArray(
+      shipGrid,
+      this._grid,
+      this.rows,
+      this.cols
+    )
   }
 
   private generateGrid(): GridCell[][] {
