@@ -83,12 +83,10 @@ export class FleetPlacer implements IFleetPlacer {
     cols: number,
     enforceSpacing: boolean
   ): boolean {
-    // Check if cells are already occupied.
     for (const {row, col} of coords) {
       if (grid[row][col].shipId !== undefined) return false
     }
 
-    // Optionally enforce spacing around the ship.
     if (enforceSpacing) {
       for (const {row, col} of coords) {
         for (let i = row - 1; i <= row + 1; i++) {
@@ -122,4 +120,3 @@ export class FleetPlacer implements IFleetPlacer {
     }
   }
 }
-

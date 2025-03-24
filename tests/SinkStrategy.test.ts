@@ -14,7 +14,7 @@ jest.mock('../libs/battleship', () => ({
   }),
 }))
 
-describe('SinkStrategy - test_getLabelsFromSet', () => {
+describe('SinkStrategy test_getLabelsFromSet', () => {
   let strategy: SinkStrategy
 
   beforeEach(() => {
@@ -41,4 +41,3 @@ describe('SinkStrategy - test_getLabelsFromSet', () => {
     expect(result).toBe('F5')
   })
 })
-

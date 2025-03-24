@@ -1,7 +1,7 @@
 import {BattleshipGrid} from '../libs/battleship'
 import {BattleshipGridRenderer} from '../libs/battleship'
 
-describe('BattleshipGrid render', () => {
+describe('BattleshipGridRenderer', () => {
   test('render should return a string representation of the grid', () => {
     const grid = new BattleshipGrid(3, 3)
     const renderer = new BattleshipGridRenderer(grid) // Use the renderer to generate the output

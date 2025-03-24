@@ -1,6 +1,6 @@
-import { BattleshipGrid } from '../libs/battleship'
+import {BattleshipGrid} from '../libs/battleship'
 
-describe('BattleshipGrid Fleet', () => {
+describe('FleetPlacer', () => {
   test('Fleet should be placed with correct ship count', () => {
     const grid = new BattleshipGrid()
     const success = grid.placeFleet(true)
