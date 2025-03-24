@@ -2,7 +2,7 @@ import {BattleshipGrid} from '../libs/battleship/index'
 import {DIRECTION} from '../libs/battleship/ai/type/DIRECTION'
 import {GridCell} from '../libs/battleship/grid/type/GridCell'
 
-describe('BattleshipGrid - isMissNextTo', () => {
+describe('BattleshipGrid isMissNextTo', () => {
   let grid: BattleshipGrid
 
   beforeEach(() => {
