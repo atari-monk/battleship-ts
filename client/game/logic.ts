@@ -1,31 +1,35 @@
-import { getInputFromPage, setInputResult } from './input'
-import { PLAYER_TYPE } from './type/PLAYER_TYPE'
-import { colorStyle } from './render'
-import { ai } from './config'
-import { PlayerConfig } from './type/PlayerConfig'
-import { HitResult } from '../../libs/battleship/grid/type/HitResult'
-import { tests } from './tests'
+import {getInputFromPage, setInputResult} from './input'
+import {PLAYER_TYPE} from './type/PLAYER_TYPE'
+import {colorStyle} from './render'
+import {ai, config} from './config'
+import {PlayerConfig} from './type/PlayerConfig'
+import {HitResult} from '../../libs/battleship/grid/type/HitResult'
+import {tests} from './tests'
+import {GAME_MODE} from './type/GAME_MODE'
 
 export function tooglePlayers(attacker: PlayerConfig, defender: PlayerConfig) {
   return [defender, attacker]
 }
 
 export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
-  const { name: attackerName } = attacker
-  const { grid } = defender
+  const {name: attackerName} = attacker
+  const {grid} = defender
 
   let validMove = false
   let hitResult: HitResult = {
     label: '',
     alreadyHit: false,
     shipHit: false,
-    log: (isShipHit) => '',
+    log: isShipHit => '',
   }
 
   while (!validMove) {
     let shot: string = ''
 
-    if (attacker.type === PLAYER_TYPE.HUMAN && false) {
+    if (
+      config.mode === GAME_MODE.PLAYER_VS_AI &&
+      attacker.type === PLAYER_TYPE.HUMAN
+    ) {
       shot = await getInputFromPage(attackerName)
       hitResult = grid.hitCell(shot)
       console.log(`${attackerName}:`, shot, hitResult.shipHit ? 'hit' : 'miss')
@@ -34,7 +38,7 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
       console.log(hitResult.log!(hitResult.shipHit))
     }
 
-    const { alreadyHit } = hitResult
+    const {alreadyHit} = hitResult
     if (alreadyHit) {
       console.log(
         `%cThis cell was already hit. Try again.`,

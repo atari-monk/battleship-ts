@@ -43,12 +43,12 @@ export function generateGrid(fleetType: FLEET_TYPE) {
   return grid
 }
 
-export const player1Grid = generateGrid(FLEET_TYPE.STATIC)
+export const player1Grid = generateGrid(FLEET_TYPE.RANDOM)
 export const player2Grid = generateGrid(FLEET_TYPE.RANDOM)
 
 export const config: GameConfig = {
   clearConsole: false,
-  mode: GAME_MODE.AI_TEST,
+  mode: GAME_MODE.PLAYER_VS_AI,
   gridId: 'grid',
   players: new Map<PLAYER, PlayerConfig>([
     [
@@ -82,6 +82,7 @@ eventEmitter.on(EVENT_STATE_CHANGED, newState => {
 })
 export const ai = new BattleshipAI(player1Grid, eventEmitter)
 
+/*
 const ids = ['playerInput', 'submitInput', 'inputResult', 'continueButton']
 
 function toogleInputDisplay(ids: string[], displayValue = Display.BLOCK) {
@@ -106,3 +107,4 @@ function toogleUIOnGameMode(ids: string[], gameMode: GAME_MODE) {
 }
 
 toogleUIOnGameMode(ids, config.mode)
+*/

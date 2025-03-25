@@ -4,14 +4,17 @@ import {config} from './config'
 import {attack, tooglePlayers} from './logic'
 import {waitForButtonClick} from './input'
 import {BattleshipGridRenderer} from './libs/../../../libs/battleship'
+import {GAME_MODE} from './type/GAME_MODE'
 
 export async function startGame() {
   let isGameOver = false
-  let attacker = config.players.get(PLAYER.PLAYER2)!
   let defender = config.players.get(PLAYER.PLAYER1)!
-  const renderer = new BattleshipGridRenderer(defender.grid)
+  let attacker = config.players.get(PLAYER.PLAYER2)!
+  const renderer1 = new BattleshipGridRenderer(defender.grid)
+  const renderer2 = new BattleshipGridRenderer(attacker.grid)
 
   while (!isGameOver) {
+    const renderer = defender.role === PLAYER.PLAYER1 ? renderer1 : renderer2
     printGameState(defender.role, config, renderer)
 
     await attack(attacker, defender)
@@ -26,6 +29,8 @@ export async function startGame() {
     }
 
     await waitForButtonClick('continueButton')
-    //;[attacker, defender] = tooglePlayers(attacker, defender)
+    if (config.mode === GAME_MODE.PLAYER_VS_AI) {
+      ;[attacker, defender] = tooglePlayers(attacker, defender)
+    }
   }
 }

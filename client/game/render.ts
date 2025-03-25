@@ -18,7 +18,7 @@ export function printPlayer(
   player: PLAYER,
   gameConfig: GameConfig,
   renderer: BattleshipGridRenderer,
-  inConsole = false
+  inConsole = true
 ) {
   const {gridId} = gameConfig
   const playerConfig = gameConfig.players.get(player)!
