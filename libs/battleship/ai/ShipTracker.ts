@@ -1,6 +1,6 @@
-import { labelToIndex } from '../util/grid'
-import { ShipOrientation } from './type/Orientation'
-import { ShipTarget } from './type/ShipTarget'
+import {labelToIndex} from '../grid/grid_util'
+import {ShipOrientation} from './type/Orientation'
+import {ShipTarget} from './type/ShipTarget'
 
 export class ShipTracker {
   private ships: Set<ShipTarget> = new Set()
@@ -53,8 +53,8 @@ export class ShipTracker {
     shot: string,
     orientation: ShipOrientation
   ): boolean {
-    const { row: existingX, col: existingY } = labelToIndex(existingHit)!
-    const { row: shotX, col: shotY } = labelToIndex(shot)!
+    const {row: existingX, col: existingY} = labelToIndex(existingHit)!
+    const {row: shotX, col: shotY} = labelToIndex(shot)!
 
     if (orientation === ShipOrientation.Unknown) {
       return (

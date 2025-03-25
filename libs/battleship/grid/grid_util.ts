@@ -1,5 +1,5 @@
 import {ShipOrientation} from '../ai/type/Orientation'
-import {Range} from '../grid/type/Range'
+import {Range} from './type/Range'
 
 export function getRandomCell(range: Range): string {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

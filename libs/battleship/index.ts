@@ -4,4 +4,4 @@ export {ShipPlacer} from './grid/ShipPlacer'
 export {FleetPlacer} from './grid/FleetPlacer'
 
 export {BattleshipAI} from './ai/BattleshipAI'
-export {labelToIndex} from './util/grid'
+export {labelToIndex} from './grid/grid_util'

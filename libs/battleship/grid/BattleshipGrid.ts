@@ -1,8 +1,8 @@
-import {DIRECTION} from '../ai/type/DIRECTION'
-import {labelToIndex} from '../util/grid'
 import {GridCell} from './type/GridCell'
-import {HitResult} from './type/HitResult'
 import {Ship} from './type/Ship'
+import {HitResult} from './type/HitResult'
+import {DIRECTION} from './type/DIRECTION'
+import {labelToIndex} from './grid_util'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
@@ -18,7 +18,17 @@ export class BattleshipGrid {
 
   constructor(public rows: number = 10, public cols: number = 10) {
     this._grid = this.generateGrid()
-    this._ships = [
+    this._ships = this.generateShips()
+  }
+
+  private generateGrid(): GridCell[][] {
+    return Array.from({length: this.rows}, () =>
+      Array.from({length: this.cols}, () => ({isHit: false}))
+    )
+  }
+
+  private generateShips(): Ship[] {
+    return [
       {id: 1, size: 5, type: 'C'},
       {id: 2, size: 4, type: 'B'},
       {id: 3, size: 3, type: 'D'},
@@ -87,11 +97,5 @@ export class BattleshipGrid {
 
     const cell = this._grid[row][col]
     return cell.isHit && !cell.shipId
-  }
-
-  private generateGrid(): GridCell[][] {
-    return Array.from({length: this.rows}, () =>
-      Array.from({length: this.cols}, () => ({isHit: false}))
-    )
   }
 }

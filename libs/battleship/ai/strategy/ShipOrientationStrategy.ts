@@ -1,15 +1,15 @@
-import { BattleshipAI } from '../BattleshipAI'
-import { IStrategy } from '../type/IStrategy'
-import { Range } from '../../grid/type/Range'
+import {BattleshipAI} from '../BattleshipAI'
+import {IStrategy} from '../type/IStrategy'
+import {Range} from '../../grid/type/Range'
 import {
   getRandomOrientation,
   Orientation,
   ShipOrientation,
 } from '../type/Orientation'
-import { coinToss } from '../../util/random'
-import { AttackResult } from '../type/AttackResult'
-import { DIRECTION } from '../type/DIRECTION'
-import { indexToLabel, labelToIndex } from '../../util/grid'
+import {coinToss} from '../../util/random'
+import {AttackResult} from '../type/AttackResult'
+import {DIRECTION} from '../../grid/type/DIRECTION'
+import {indexToLabel, labelToIndex} from '../../grid/grid_util'
 
 export class ShipOrientationStrategy implements IStrategy {
   private _ai
@@ -55,7 +55,7 @@ export class ShipOrientationStrategy implements IStrategy {
     this.reset()
   }
 
-  private getNextMove(hit: { row: number; col: number }) {
+  private getNextMove(hit: {row: number; col: number}) {
     this.orientation = getRandomOrientation()
 
     if (this.counter.has(DIRECTION.LEFT) && this.counter.has(DIRECTION.RIGHT)) {
@@ -65,7 +65,7 @@ export class ShipOrientationStrategy implements IStrategy {
       this.orientation = Orientation.Horizontal
     }
 
-    let next = { row: hit.row, col: hit.col }
+    let next = {row: hit.row, col: hit.col}
 
     if (this.orientation === Orientation.Horizontal) {
       if (!this.counter.has(DIRECTION.LEFT) && coinToss()) {

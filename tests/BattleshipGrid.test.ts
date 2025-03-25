@@ -1,6 +1,6 @@
-import {BattleshipGrid} from '../libs/battleship/index'
-import {DIRECTION} from '../libs/battleship/ai/type/DIRECTION'
 import {GridCell} from '../libs/battleship/grid/type/GridCell'
+import {DIRECTION} from '../libs/battleship/grid/type/DIRECTION'
+import {BattleshipGrid} from '../libs/battleship/index'
 
 describe('BattleshipGrid', () => {
   describe('constructor', () => {

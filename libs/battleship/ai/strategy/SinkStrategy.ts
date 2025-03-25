@@ -2,10 +2,10 @@ import {BattleshipAI} from '../BattleshipAI'
 import {IStrategy} from '../type/IStrategy'
 import {Range} from '../../grid/type/Range'
 import {AttackResult} from '../type/AttackResult'
-import {DIRECTION} from '../type/DIRECTION'
+import {DIRECTION} from '../../grid/type/DIRECTION'
 import {ShipOrientation} from '../type/Orientation'
 import {coinToss} from '../../util/random'
-import {indexToLabel, labelToIndex, sortLabels} from '../../util/grid'
+import {indexToLabel, labelToIndex, sortLabels} from '../../grid/grid_util'
 import {ShipTarget} from '../type/ShipTarget'
 
 export class SinkStrategy implements IStrategy {

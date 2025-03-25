@@ -1,6 +1,6 @@
-import {SinkStrategy} from '../libs/battleship/ai/strategy/SinkStrategy'
-import {DIRECTION} from '../libs/battleship/ai/type/DIRECTION'
+import {DIRECTION} from '../libs/battleship/grid/type/DIRECTION'
 import {ShipOrientation} from '../libs/battleship/ai/type/Orientation'
+import {SinkStrategy} from '../libs/battleship/ai/strategy/SinkStrategy'
 
 jest.mock('../libs/battleship', () => ({
   labelToIndex: jest.fn((label: string) => {
