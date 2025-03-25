@@ -167,80 +167,76 @@ describe('BattleshipGrid', () => {
   })
 
   describe('isGameOver', () => {
-    let grid: BattleshipGrid
-
-    beforeEach(() => {
-      grid = new BattleshipGrid()
-    })
-
     test('should return true when the game is over (all cells are hit)', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({isHit: true}))
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({isHit: true}))
       )
 
-      ;(grid as any)._grid = mockGrid
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       expect(grid.isGameOver()).toBe(true)
     })
 
     test('should return false when the game is not over (some cells are not hit)', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({
           isHit: false,
           shipId: undefined,
         }))
       )
-
       mockGrid[0][0] = {isHit: true, shipId: 1}
       mockGrid[0][1] = {isHit: false, shipId: 1}
-      ;(grid as any)._grid = mockGrid
+
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       expect(grid.isGameOver()).toBe(false)
     })
 
     test('should return true when all ships are sunk (every ship has been hit)', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({isHit: true, shipId: 1}))
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({isHit: true, shipId: 1}))
       )
 
-      ;(grid as any)._grid = mockGrid
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       expect(grid.isGameOver()).toBe(true)
     })
 
     test('should return false when only some ships are hit', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({
           isHit: false,
           shipId: undefined,
         }))
       )
-
       mockGrid[0][0] = {isHit: true, shipId: 1}
       mockGrid[0][1] = {isHit: true, shipId: 1}
       mockGrid[1][0] = {isHit: false, shipId: 2}
       mockGrid[1][1] = {isHit: false, shipId: 2}
-      ;(grid as any)._grid = mockGrid
+
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       expect(grid.isGameOver()).toBe(false)
     })
 
     test('should return false when all non-ship cells are hit, but a ship cell remains', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({isHit: true}))
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({isHit: true}))
       )
       mockGrid[2][2] = {isHit: false, shipId: 1}
-      ;(grid as any)._grid = mockGrid
+
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       expect(grid.isGameOver()).toBe(false)
     })
 
     test('should return true when the last remaining ship cell is hit', () => {
-      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
-        Array.from({length: grid.cols}, () => ({isHit: true}))
+      const mockGrid: GridCell[][] = Array.from({length: 10}, () =>
+        Array.from({length: 10}, () => ({isHit: true}))
       )
       mockGrid[2][2] = {isHit: false, shipId: 1}
-      ;(grid as any)._grid = mockGrid
+
+      const grid = new BattleshipGrid(10, 10, mockGrid)
 
       grid.hitCell('C3')
 

@@ -19,6 +19,7 @@ export class BattleshipGrid {
   constructor(
     public rows: number = 10,
     public cols: number = 10,
+    initialGrid?: GridCell[][],
     ships: Ship[] = [
       {id: 1, size: 5, type: 'C'},
       {id: 2, size: 4, type: 'B'},
@@ -27,7 +28,7 @@ export class BattleshipGrid {
       {id: 5, size: 2, type: 'P'},
     ]
   ) {
-    this._grid = this.generateGrid()
+    this._grid = initialGrid ?? this.generateGrid()
     this._ships = ships
   }
 
