@@ -40,28 +40,28 @@ describe('BattleshipGrid', () => {
 
     test('should mark the correct cell as hit and return expected result', () => {
       let result = grid.hitCell('A1')
+      expect(grid.grid[0][0].isHit).toBe(true)
       expect(result).toEqual({
         label: 'A1',
         alreadyHit: false,
-        shipHit: expect.any(Boolean),
+        shipHit: true,
       })
-      expect(grid.grid[0][0].isHit).toBe(true)
 
       result = grid.hitCell('C3')
+      expect(grid.grid[2][2].isHit).toBe(true)
       expect(result).toEqual({
         label: 'C3',
         alreadyHit: false,
-        shipHit: expect.any(Boolean),
+        shipHit: false,
       })
-      expect(grid.grid[2][2].isHit).toBe(true)
 
       result = grid.hitCell('J10')
+      expect(grid.grid[9][9].isHit).toBe(true)
       expect(result).toEqual({
         label: 'J10',
         alreadyHit: false,
-        shipHit: expect.any(Boolean),
+        shipHit: false,
       })
-      expect(grid.grid[9][9].isHit).toBe(true)
     })
 
     test('should correctly register a ship hit', () => {
