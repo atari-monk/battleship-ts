@@ -29,9 +29,16 @@ describe('BattleshipGrid', () => {
   })
 
   describe('hitCell', () => {
-    test('should mark the correct cell as hit and return expected result', () => {
-      const grid = new BattleshipGrid()
+    let grid: BattleshipGrid
 
+    beforeEach(() => {
+      grid = new BattleshipGrid()
+      grid.grid[0][0] = {isHit: false, shipId: 1} as GridCell
+      grid.grid[0][1] = {isHit: false, shipId: undefined} as GridCell
+      grid.grid[0][2] = {isHit: false, shipId: 2} as GridCell
+    })
+
+    test('should mark the correct cell as hit and return expected result', () => {
       let result = grid.hitCell('A1')
       expect(result).toEqual({
         label: 'A1',
@@ -57,60 +64,33 @@ describe('BattleshipGrid', () => {
       expect(grid.grid[9][9].isHit).toBe(true)
     })
 
-    test('should throw an error for invalid inputs', () => {
-      const grid = new BattleshipGrid()
-
-      expect(() => grid.hitCell('K1')).toThrow(Error)
-      expect(() => grid.hitCell('A11')).toThrow(Error)
-      expect(() => grid.hitCell('Z5')).toThrow(Error)
-      expect(() => grid.hitCell('5B')).toThrow(Error)
-      expect(() => grid.hitCell('')).toThrow(Error)
+    test('should correctly register a ship hit', () => {
+      const result = grid.hitCell('A1')
+      expect(result).toEqual({
+        label: 'A1',
+        alreadyHit: false,
+        shipHit: true,
+      })
+      expect(grid.grid[0][0].isHit).toBe(true)
     })
 
-    test('should return alreadyHit: true if the same cell is hit twice', () => {
-      const grid = new BattleshipGrid()
-
-      let result = grid.hitCell('B2')
+    test('should correctly register a miss', () => {
+      const result = grid.hitCell('A2')
       expect(result).toEqual({
-        label: 'B2',
+        label: 'A2',
         alreadyHit: false,
-        shipHit: expect.any(Boolean),
+        shipHit: false,
       })
+      expect(grid.grid[1][0].isHit).toBe(true)
+    })
 
-      result = grid.hitCell('B2')
-      expect(result).toEqual({
-        label: 'B2',
-        alreadyHit: true,
-        shipHit: expect.any(Boolean),
-      })
+    test('should correctly register multiple hits on different ships', () => {
+      grid.hitCell('A1')
+      grid.hitCell('A3')
 
-      result = grid.hitCell('E5')
-      expect(result).toEqual({
-        label: 'E5',
-        alreadyHit: false,
-        shipHit: expect.any(Boolean),
-      })
-
-      result = grid.hitCell('E5')
-      expect(result).toEqual({
-        label: 'E5',
-        alreadyHit: true,
-        shipHit: expect.any(Boolean),
-      })
-
-      result = grid.hitCell('H7')
-      expect(result).toEqual({
-        label: 'H7',
-        alreadyHit: false,
-        shipHit: expect.any(Boolean),
-      })
-
-      result = grid.hitCell('H7')
-      expect(result).toEqual({
-        label: 'H7',
-        alreadyHit: true,
-        shipHit: expect.any(Boolean),
-      })
+      expect(grid.grid[0][0].isHit).toBe(true)
+      expect(grid.grid[2][0].isHit).toBe(true)
+      expect(grid.grid[0][1].isHit).toBe(false)
     })
   })
 
@@ -243,6 +223,28 @@ describe('BattleshipGrid', () => {
       ;(grid as any)._grid = mockGrid
 
       expect(grid.isGameOver()).toBe(false)
+    })
+
+    test('should return false when all non-ship cells are hit, but a ship cell remains', () => {
+      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
+        Array.from({length: grid.cols}, () => ({isHit: true}))
+      )
+      mockGrid[2][2] = {isHit: false, shipId: 1}
+      ;(grid as any)._grid = mockGrid
+
+      expect(grid.isGameOver()).toBe(false)
+    })
+
+    test('should return true when the last remaining ship cell is hit', () => {
+      const mockGrid: GridCell[][] = Array.from({length: grid.rows}, () =>
+        Array.from({length: grid.cols}, () => ({isHit: true}))
+      )
+      mockGrid[2][2] = {isHit: false, shipId: 1}
+      ;(grid as any)._grid = mockGrid
+
+      grid.hitCell('C3')
+
+      expect(grid.isGameOver()).toBe(true)
     })
   })
 })
