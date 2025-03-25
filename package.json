@@ -6,9 +6,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "tsc",
+    "build_ts": "tsc",
+    "build": "vite build",
     "test": "jest",
-    "dev": "vite client"
+    "dev": "vite client",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
