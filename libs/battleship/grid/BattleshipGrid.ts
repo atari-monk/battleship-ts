@@ -2,25 +2,23 @@ import {DIRECTION} from '../ai/type/DIRECTION'
 import {labelToIndex} from '../util/grid'
 import {GridCell} from './type/GridCell'
 import {HitResult} from './type/HitResult'
-import {IFleetPlacer} from './type/IFleetPlacer'
-import {FleetPlacer} from './FleetPlacer'
 import {Ship} from './type/Ship'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
-  private ships: Ship[]
+  private _ships: Ship[]
 
   get grid(): GridCell[][] {
     return this._grid
   }
 
-  constructor(
-    public rows: number = 10,
-    public cols: number = 10,
-    private fleetPlacer: IFleetPlacer = new FleetPlacer()
-  ) {
+  get ships(): Ship[] {
+    return this._ships
+  }
+
+  constructor(public rows: number = 10, public cols: number = 10) {
     this._grid = this.generateGrid()
-    this.ships = [
+    this._ships = [
       {id: 1, size: 5, type: 'C'},
       {id: 2, size: 4, type: 'B'},
       {id: 3, size: 3, type: 'D'},
@@ -30,7 +28,7 @@ export class BattleshipGrid {
   }
 
   public getShipType(shipId: number): string {
-    const ship = this.ships.find(s => s.id === shipId)
+    const ship = this._ships.find(s => s.id === shipId)
     return ship ? ship.type : '?'
   }
 
@@ -89,16 +87,6 @@ export class BattleshipGrid {
 
     const cell = this._grid[row][col]
     return cell.isHit && !cell.shipId
-  }
-
-  public placeFleet(enforceSpacing: boolean = true): boolean {
-    return this.fleetPlacer.placeFleet(
-      this.ships,
-      this._grid,
-      this.rows,
-      this.cols,
-      enforceSpacing
-    )
   }
 
   private generateGrid(): GridCell[][] {

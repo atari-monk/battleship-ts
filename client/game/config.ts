@@ -1,4 +1,9 @@
-import {BattleshipGrid, BattleshipAI, ShipPlacer} from '../../libs/battleship'
+import {
+  BattleshipGrid,
+  BattleshipAI,
+  ShipPlacer,
+  FleetPlacer,
+} from '../../libs/battleship'
 import {FLEET_TYPE} from './type/FLEET_TYPE'
 import {GAME_MODE} from './type/GAME_MODE'
 import {PLAYER} from './type/PLAYER'
@@ -13,12 +18,14 @@ import {
   StateEvents,
 } from '../../libs/battleship/events/events'
 import {State} from '../../libs/battleship/ai/type/State'
+import {IFleetPlacer} from '../../libs/battleship/grid/type/IFleetPlacer'
 
 export function generateGrid(fleetType: FLEET_TYPE) {
   const grid = new BattleshipGrid()
+  const fleetPlacer: IFleetPlacer = new FleetPlacer()
   switch (fleetType) {
     case FLEET_TYPE.RANDOM:
-      grid.placeFleet()
+      fleetPlacer.placeFleet(grid.ships, grid.grid, grid.rows, grid.cols, true)
       break
     case FLEET_TYPE.STATIC:
       ShipPlacer.placeShipsFromArray(
@@ -29,7 +36,7 @@ export function generateGrid(fleetType: FLEET_TYPE) {
       )
       break
     default:
-      grid.placeFleet()
+      fleetPlacer.placeFleet(grid.ships, grid.grid, grid.rows, grid.cols, true)
       break
   }
   return grid

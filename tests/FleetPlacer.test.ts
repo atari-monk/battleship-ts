@@ -1,9 +1,17 @@
-import {BattleshipGrid} from '../libs/battleship'
+import {BattleshipGrid, FleetPlacer} from '../libs/battleship'
+import {IFleetPlacer} from '../libs/battleship/grid/type/IFleetPlacer'
 
 describe('FleetPlacer', () => {
   test('Fleet should be placed with correct ship count', () => {
     const grid = new BattleshipGrid()
-    const success = grid.placeFleet(true)
+    const fleetPlacer: IFleetPlacer = new FleetPlacer()
+    const success = fleetPlacer.placeFleet(
+      grid.ships,
+      grid.grid,
+      grid.rows,
+      grid.cols,
+      true
+    )
 
     expect(success).toBe(true)
 
@@ -15,7 +23,16 @@ describe('FleetPlacer', () => {
 
   test('Ships should not overlap', () => {
     const grid = new BattleshipGrid()
-    grid.placeFleet(true)
+    const fleetPlacer: IFleetPlacer = new FleetPlacer()
+    const success = fleetPlacer.placeFleet(
+      grid.ships,
+      grid.grid,
+      grid.rows,
+      grid.cols,
+      true
+    )
+
+    expect(success).toBe(true)
 
     const shipCells: Set<string> = new Set()
 
@@ -32,7 +49,16 @@ describe('FleetPlacer', () => {
 
   test('Ships should have at least one empty cell between them if spacing is enforced', () => {
     const grid = new BattleshipGrid()
-    grid.placeFleet(true)
+    const fleetPlacer: IFleetPlacer = new FleetPlacer()
+    const success = fleetPlacer.placeFleet(
+      grid.ships,
+      grid.grid,
+      grid.rows,
+      grid.cols,
+      true
+    )
+
+    expect(success).toBe(true)
 
     for (let row = 0; row < grid.rows; row++) {
       for (let col = 0; col < grid.cols; col++) {
