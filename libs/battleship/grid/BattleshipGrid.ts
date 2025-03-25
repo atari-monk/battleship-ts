@@ -5,7 +5,6 @@ import {HitResult} from './type/HitResult'
 import {IFleetPlacer} from './type/IFleetPlacer'
 import {FleetPlacer} from './FleetPlacer'
 import {Ship} from './type/Ship'
-import {ShipPlacer} from './ShipPlacer'
 
 export class BattleshipGrid {
   private _grid: GridCell[][]
@@ -99,15 +98,6 @@ export class BattleshipGrid {
       this.rows,
       this.cols,
       enforceSpacing
-    )
-  }
-
-  public placeShipsFromArray(shipGrid: number[][]): boolean {
-    return ShipPlacer.placeShipsFromArray(
-      shipGrid,
-      this._grid,
-      this.rows,
-      this.cols
     )
   }
 

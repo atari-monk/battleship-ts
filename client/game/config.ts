@@ -1,4 +1,4 @@
-import {BattleshipGrid, BattleshipAI} from '../../libs/battleship'
+import {BattleshipGrid, BattleshipAI, ShipPlacer} from '../../libs/battleship'
 import {FLEET_TYPE} from './type/FLEET_TYPE'
 import {GAME_MODE} from './type/GAME_MODE'
 import {PLAYER} from './type/PLAYER'
@@ -21,7 +21,12 @@ export function generateGrid(fleetType: FLEET_TYPE) {
       grid.placeFleet()
       break
     case FLEET_TYPE.STATIC:
-      grid.placeShipsFromArray(tests.test4.grid)
+      ShipPlacer.placeShipsFromArray(
+        tests.test4.grid,
+        grid.grid,
+        grid.rows,
+        grid.cols
+      )
       break
     default:
       grid.placeFleet()
