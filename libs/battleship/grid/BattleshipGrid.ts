@@ -16,25 +16,35 @@ export class BattleshipGrid {
     return this._ships
   }
 
-  constructor(public rows: number = 10, public cols: number = 10) {
-    this._grid = this.generateGrid()
-    this._ships = this.generateShips()
-  }
-
-  private generateGrid(): GridCell[][] {
-    return Array.from({length: this.rows}, () =>
-      Array.from({length: this.cols}, () => ({isHit: false}))
-    )
-  }
-
-  private generateShips(): Ship[] {
-    return [
+  constructor(
+    public rows: number = 10,
+    public cols: number = 10,
+    ships: Ship[] = [
       {id: 1, size: 5, type: 'C'},
       {id: 2, size: 4, type: 'B'},
       {id: 3, size: 3, type: 'D'},
       {id: 4, size: 3, type: 'S'},
       {id: 5, size: 2, type: 'P'},
     ]
+  ) {
+    this._grid = this.generateGrid()
+    this._ships = ships
+  }
+
+  private generateGrid(): GridCell[][] {
+    const grid: GridCell[][] = []
+    for (let i = 0; i < this.rows; i++) {
+      const row: GridCell[] = []
+      for (let j = 0; j < this.cols; j++) {
+        row.push({isHit: false})
+      }
+      grid.push(row)
+    }
+    return grid
+  }
+
+  private isValidPosition(row: number, col: number): boolean {
+    return row >= 0 && row < this.rows && col >= 0 && col < this.cols
   }
 
   public getShipType(shipId: number): string {
@@ -43,14 +53,21 @@ export class BattleshipGrid {
   }
 
   public isGameOver(): boolean {
-    return this._grid.every(row =>
-      row.every(cell => cell.shipId === undefined || cell.isHit)
-    )
+    for (let row of this._grid) {
+      for (let cell of row) {
+        if (cell.shipId !== undefined && !cell.isHit) {
+          return false
+        }
+      }
+    }
+    return true
   }
 
   public hitCell(label: string): HitResult {
     const position = labelToIndex(label, this.rows, this.cols)
-    if (!position) throw new Error('Invalid label provided')
+    if (!position || !this.isValidPosition(position.row, position.col)) {
+      throw new Error('Invalid label provided')
+    }
 
     const {row, col} = position
     const cell = this._grid[row][col]
@@ -74,7 +91,8 @@ export class BattleshipGrid {
 
   public isMissNextTo(label: string, direction: DIRECTION): boolean {
     const position = labelToIndex(label, this.rows, this.cols)
-    if (!position) return false
+    if (!position || !this.isValidPosition(position.row, position.col))
+      return false
 
     let {row, col} = position
 
@@ -93,7 +111,7 @@ export class BattleshipGrid {
         break
     }
 
-    if (row < 0 || row >= this.rows || col < 0 || col >= this.cols) return false
+    if (!this.isValidPosition(row, col)) return false
 
     const cell = this._grid[row][col]
     return cell.isHit && !cell.shipId
