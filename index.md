@@ -1,11 +1,11 @@
 Classic Battleship game in typescript.  
 
-## Doc
+## Documentation
 
-- [Typescript Project Configuration](docs/note/typescript_project.md)
-- [File System Notation](docs/note/note_folders.md)
+- [BattleshipGrid](docs/BattleshipGrid.md)
 - [AI](docs/ai/index.md)
 
 ## Game
 
 - [Version 001](game/version_001/index.html)
+- [Version 002](game/version_002/index.html)
