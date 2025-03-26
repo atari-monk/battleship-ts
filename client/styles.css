@@ -21,21 +21,19 @@ pre {
   font-weight: bold;
   padding: 0px;
   margin: 0px;
-  margin-bottom: 10px;
   border-radius: 5px;
   text-align: center;
   user-select: none;
 }
 
-button {
-  margin-top: 15px;
+input {
+  width: 50px;
 }
 
 @media screen and (max-width: 400px) and (orientation: portrait) {
   pre {
-    font-size: 25px;
+    font-size: 20px;
     margin-top: 10px;
-    margin-bottom: 10px;
   }
 
   body {
@@ -52,16 +50,32 @@ button {
 }
 
 p {
-  color: white;
+  color: red;
   user-select: none;
   margin: 0;
+  font-weight: bold;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+#playerControls,
+#gameControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 @media screen and (max-width: 1080px) and (orientation: landscape) {
   body::before {
     content: 'Please rotate your device to portrait mode to play.';
     color: white;
-    font-size: 30px;
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
     position: absolute;
