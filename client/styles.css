@@ -39,10 +39,6 @@ input {
   body {
     justify-content: flex-start;
   }
-
-  #playerControls {
-    visibility: hidden !important;
-  }
 }
 
 .player1Grid {
