@@ -20,7 +20,7 @@ export class ShipOrientationStrategy implements IStrategy {
     this._ai = ai
   }
 
-  attack(range: Range): AttackResult {
+  attack(_: Range): AttackResult {
     const target = this._ai.getHitShip()!
     const hit = labelToIndex([...target.hits][0])!
     const next = this.getNextMove(hit)
