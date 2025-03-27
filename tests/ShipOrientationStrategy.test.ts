@@ -90,4 +90,25 @@ describe('ShipOrientationStrategy', () => {
 
     expect(mockAI.getHitShip()!.orientation).toBe(ShipOrientation.Unknown)
   })
+
+  test('attack should not go outside grid when ship is near edge', () => {
+    mockAI.getHitShip.mockReturnValue({
+      hits: new Set(['E1', 'E2']),
+      orientation: ShipOrientation.Vertical,
+      isSunk: false,
+    })
+
+    let result: AttackResult
+
+    do {
+      result = strategy.attack({} as Range)
+    } while (
+      result.shot === 'E1' ||
+      result.shot === 'E2' ||
+      result.shot === 'D1' ||
+      result.shot === 'F1'
+    )
+
+    expect(result.shot).not.toBe(null)
+  })
 })
