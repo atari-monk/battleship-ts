@@ -91,7 +91,49 @@ describe('ShipOrientationStrategy', () => {
     expect(mockAI.getHitShip()!.orientation).toBe(ShipOrientation.Unknown)
   })
 
-  test('attack should not go outside grid when ship is near edge', () => {
+  test('attack should not go outside grid when ship is near left edge', () => {
+    mockAI.getHitShip.mockReturnValue({
+      hits: new Set(['A5', 'B5']),
+      orientation: ShipOrientation.Horizontal,
+      isSunk: false,
+    })
+
+    let result: AttackResult
+
+    do {
+      result = strategy.attack({} as Range)
+    } while (
+      result.shot === 'A5' ||
+      result.shot === 'B5' ||
+      result.shot === 'A4' ||
+      result.shot === 'A6'
+    )
+
+    expect(result.shot).not.toBe(null)
+  })
+
+  test('attack should not go outside grid when ship is near right edge', () => {
+    mockAI.getHitShip.mockReturnValue({
+      hits: new Set(['J5', 'I5']),
+      orientation: ShipOrientation.Horizontal,
+      isSunk: false,
+    })
+
+    let result: AttackResult
+
+    do {
+      result = strategy.attack({} as Range)
+    } while (
+      result.shot === 'J5' ||
+      result.shot === 'I5' ||
+      result.shot === 'J4' ||
+      result.shot === 'J6'
+    )
+
+    expect(result.shot).not.toBe(null)
+  })
+
+  test('attack should not go outside grid when ship is near top edge', () => {
     mockAI.getHitShip.mockReturnValue({
       hits: new Set(['E1', 'E2']),
       orientation: ShipOrientation.Vertical,
@@ -107,6 +149,27 @@ describe('ShipOrientationStrategy', () => {
       result.shot === 'E2' ||
       result.shot === 'D1' ||
       result.shot === 'F1'
+    )
+
+    expect(result.shot).not.toBe(null)
+  })
+
+  test('attack should not go outside grid when ship is near bottom edge', () => {
+    mockAI.getHitShip.mockReturnValue({
+      hits: new Set(['E10', 'E9']),
+      orientation: ShipOrientation.Vertical,
+      isSunk: false,
+    })
+
+    let result: AttackResult
+
+    do {
+      result = strategy.attack({} as Range)
+    } while (
+      result.shot === 'E10' ||
+      result.shot === 'E9' ||
+      result.shot === 'D10' ||
+      result.shot === 'F10'
     )
 
     expect(result.shot).not.toBe(null)
