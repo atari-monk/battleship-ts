@@ -18,7 +18,7 @@ export function printPlayer(
   player: PLAYER,
   gameConfig: GameConfig,
   renderer: BattleshipGridRenderer,
-  inConsole = false
+  inConsole = config.printGridInConsole
 ) {
   const {gridId} = gameConfig
   const playerConfig = gameConfig.players.get(player)!
@@ -26,7 +26,7 @@ export function printPlayer(
 
   if (!inConsole) return
 
-  const {name, style, grid, hideShips} = playerConfig
+  const {name, style, hideShips} = playerConfig
   console.log(`%c${name}`, style)
   console.log(`%c${renderer.render(hideShips)}\n`, style)
 }

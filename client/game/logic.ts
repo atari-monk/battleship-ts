@@ -4,7 +4,7 @@ import {colorStyle} from './render'
 import {ai, config} from './config'
 import {PlayerConfig} from './type/PlayerConfig'
 import {HitResult} from '../../libs/battleship/grid/type/HitResult'
-import {tests} from './tests'
+import {test} from './tests'
 import {GAME_MODE} from './type/GAME_MODE'
 
 export function tooglePlayers(attacker: PlayerConfig, defender: PlayerConfig) {
@@ -20,7 +20,7 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
     label: '',
     alreadyHit: false,
     shipHit: false,
-    log: isShipHit => '',
+    log: _ => '',
   }
 
   while (!validMove) {
@@ -34,7 +34,16 @@ export async function attack(attacker: PlayerConfig, defender: PlayerConfig) {
       hitResult = grid.hitCell(shot)
       console.log(`${attackerName}:`, shot, hitResult.shipHit ? 'hit' : 'miss')
     } else if (attacker.type === PLAYER_TYPE.AI) {
-      hitResult = ai.aiMove(tests.test4.range)
+      hitResult = ai.aiMove(
+        config.mode === GAME_MODE.PLAYER_VS_AI
+          ? {
+              minLetter: 'A',
+              maxLetter: 'J',
+              minNumber: 1,
+              maxNumber: 10,
+            }
+          : test.range
+      )
       console.log(hitResult.log!(hitResult.shipHit))
     }
 
