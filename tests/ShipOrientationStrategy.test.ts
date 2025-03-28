@@ -98,18 +98,15 @@ describe('ShipOrientationStrategy', () => {
       isSunk: false,
     })
 
-    let result: AttackResult
+    const result1 = strategy.attack({} as Range)
+    const result2 = strategy.attack({} as Range)
+    const result3 = strategy.attack({} as Range)
+    const result4 = strategy.attack({} as Range)
 
-    do {
-      result = strategy.attack({} as Range)
-    } while (
-      result.shot === 'A5' ||
-      result.shot === 'B5' ||
-      result.shot === 'A4' ||
-      result.shot === 'A6'
-    )
-
-    expect(result.shot).not.toBe(null)
+    expect(result1.shot).toBe('A4')
+    expect(result2.shot).toBe('B5')
+    expect(result3.shot).toBe('A6')
+    expect(result4.shot).toBe('A4')
   })
 
   test('attack should not go outside grid when ship is near right edge', () => {
@@ -119,18 +116,15 @@ describe('ShipOrientationStrategy', () => {
       isSunk: false,
     })
 
-    let result: AttackResult
+    const result1 = strategy.attack({} as Range)
+    const result2 = strategy.attack({} as Range)
+    const result3 = strategy.attack({} as Range)
+    const result4 = strategy.attack({} as Range)
 
-    do {
-      result = strategy.attack({} as Range)
-    } while (
-      result.shot === 'J5' ||
-      result.shot === 'I5' ||
-      result.shot === 'J4' ||
-      result.shot === 'J6'
-    )
-
-    expect(result.shot).not.toBe(null)
+    expect(result1.shot).toBe('I5')
+    expect(result2.shot).toBe('J4')
+    expect(result3.shot).toBe('J6')
+    expect(result4.shot).toBe('I5')
   })
 
   test('attack should not go outside grid when ship is near top edge', () => {
@@ -140,18 +134,15 @@ describe('ShipOrientationStrategy', () => {
       isSunk: false,
     })
 
-    let result: AttackResult
+    const result1 = strategy.attack({} as Range)
+    const result2 = strategy.attack({} as Range)
+    const result3 = strategy.attack({} as Range)
+    const result4 = strategy.attack({} as Range)
 
-    do {
-      result = strategy.attack({} as Range)
-    } while (
-      result.shot === 'E1' ||
-      result.shot === 'E2' ||
-      result.shot === 'D1' ||
-      result.shot === 'F1'
-    )
-
-    expect(result.shot).not.toBe(null)
+    expect(result1.shot).toBe('D1')
+    expect(result2.shot).toBe('F1')
+    expect(result3.shot).toBe('E2')
+    expect(result4.shot).toBe('D1')
   })
 
   test('attack should not go outside grid when ship is near bottom edge', () => {
@@ -161,17 +152,30 @@ describe('ShipOrientationStrategy', () => {
       isSunk: false,
     })
 
-    let result: AttackResult
+    const result1 = strategy.attack({} as Range)
+    const result2 = strategy.attack({} as Range)
+    const result3 = strategy.attack({} as Range)
+    const result4 = strategy.attack({} as Range)
 
-    do {
-      result = strategy.attack({} as Range)
-    } while (
-      result.shot === 'E10' ||
-      result.shot === 'E9' ||
-      result.shot === 'D10' ||
-      result.shot === 'F10'
-    )
+    expect(result1.shot).toBe('D10')
+    expect(result2.shot).toBe('E9')
+    expect(result3.shot).toBe('F10')
+    expect(result4.shot).toBe('D10')
+  })
 
-    expect(result.shot).not.toBe(null)
+  test('attack should not go outside grid when ship is near left top corner', () => {
+    mockAI.getHitShip.mockReturnValue({
+      hits: new Set(['A1', 'A2']),
+      orientation: ShipOrientation.Vertical,
+      isSunk: false,
+    })
+
+    const result1 = strategy.attack({} as Range)
+    const result2 = strategy.attack({} as Range)
+    const result3 = strategy.attack({} as Range)
+
+    expect(result1.shot).toBe('B1')
+    expect(result2.shot).toBe('A2')
+    expect(result3.shot).toBe('B1')
   })
 })

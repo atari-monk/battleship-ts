@@ -1,23 +1,36 @@
 import {BattleshipAI} from '../BattleshipAI'
 import {IStrategy} from '../type/IStrategy'
 import {Range} from '../../grid/type/Range'
-import {
-  getRandomOrientation,
-  Orientation,
-  ShipOrientation,
-} from '../type/Orientation'
-import {coinToss} from '../../util/random'
+import {ShipOrientation} from '../type/Orientation'
 import {AttackResult} from '../type/AttackResult'
-import {DIRECTION} from '../../grid/type/DIRECTION'
 import {indexToLabel, labelToIndex} from '../../grid/grid_util'
+import {DIRECTION} from '../../grid/type/DIRECTION'
 
 export class ShipOrientationStrategy implements IStrategy {
   private _ai
-  private orientation: Orientation = Orientation.Horizontal
-  private counter: Set<DIRECTION> = new Set()
+  private MOVE_MAP: Record<DIRECTION, {row: number; col: number}>
+  private directions: DIRECTION[]
+  private directionIndex: number
 
   constructor(ai: BattleshipAI) {
     this._ai = ai
+    this.MOVE_MAP = this.getMoveMap()
+    this.directions = [
+      DIRECTION.LEFT,
+      DIRECTION.UP,
+      DIRECTION.RIGHT,
+      DIRECTION.DOWN,
+    ]
+    this.directionIndex = 0
+  }
+
+  private getMoveMap(): Record<DIRECTION, {row: number; col: number}> {
+    return {
+      [DIRECTION.LEFT]: {row: 0, col: -1},
+      [DIRECTION.UP]: {row: -1, col: 0},
+      [DIRECTION.RIGHT]: {row: 0, col: 1},
+      [DIRECTION.DOWN]: {row: 1, col: 0},
+    }
   }
 
   attack(_: Range): AttackResult {
@@ -56,38 +69,41 @@ export class ShipOrientationStrategy implements IStrategy {
   }
 
   private getNextMove(hit: {row: number; col: number}) {
-    this.orientation = getRandomOrientation()
-
-    if (this.counter.has(DIRECTION.LEFT) && this.counter.has(DIRECTION.RIGHT)) {
-      this.orientation = Orientation.Vertical
-    }
-    if (this.counter.has(DIRECTION.UP) && this.counter.has(DIRECTION.DOWN)) {
-      this.orientation = Orientation.Horizontal
-    }
-
     let next = {row: hit.row, col: hit.col}
 
-    if (this.orientation === Orientation.Horizontal) {
-      if (!this.counter.has(DIRECTION.LEFT) && coinToss()) {
-        this.counter.add(DIRECTION.LEFT)
-        next.row--
-      } else if (!this.counter.has(DIRECTION.RIGHT)) {
-        this.counter.add(DIRECTION.RIGHT)
-        next.row++
-      }
-    } else {
-      if (!this.counter.has(DIRECTION.DOWN) && coinToss()) {
-        this.counter.add(DIRECTION.DOWN)
-        next.col--
-      } else if (!this.counter.has(DIRECTION.UP)) {
-        this.counter.add(DIRECTION.UP)
-        next.col++
+    const directionChecks = [
+      () =>
+        this.directions[this.directionIndex] === DIRECTION.LEFT &&
+        hit.col === 0,
+      () =>
+        this.directions[this.directionIndex] === DIRECTION.UP && hit.row === 0,
+      () =>
+        this.directions[this.directionIndex] === DIRECTION.RIGHT &&
+        hit.col === 9,
+      () =>
+        this.directions[this.directionIndex] === DIRECTION.DOWN &&
+        hit.row === 9,
+    ]
+
+    let validMoveFound = false
+    while (!validMoveFound) {
+      if (!directionChecks[this.directionIndex]()) {
+        validMoveFound = true
+      } else {
+        this.directionIndex = (this.directionIndex + 1) % this.directions.length
       }
     }
+
+    const move = this.MOVE_MAP[this.directions[this.directionIndex]]
+    next.row += move.row
+    next.col += move.col
+
+    this.directionIndex = (this.directionIndex + 1) % this.directions.length
+
     return next
   }
 
   private reset() {
-    this.counter.clear()
+    this.directionIndex = 0
   }
 }

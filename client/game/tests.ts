@@ -1,4 +1,5 @@
 import {DIRECTION} from '../../libs/battleship/grid/type/DIRECTION'
+import {GridCornerTest} from './GridCornerTest'
 import {GridEdgeTest} from './GridEdgeTest'
 
 type TestKeys = `test${number}` | `test${number}_${number}`
@@ -94,9 +95,11 @@ const test4_2: ITest = new GridEdgeTest(DIRECTION.RIGHT).getTest()
 const test4_3: ITest = new GridEdgeTest(DIRECTION.UP).getTest()
 const test4_4: ITest = new GridEdgeTest(DIRECTION.DOWN).getTest()
 
-const test5: ITest = {
-  key: 'test5',
-  description: 'Test 5: Fleet of 5 ships',
+const test5_1: ITest = new GridCornerTest(DIRECTION.LEFT).getTest()
+
+const test6: ITest = {
+  key: 'test6',
+  description: 'Test 6: Fleet of 5 ships',
   grid: [
     //      A  B  C  D  E  F  G  H  I  J
     /*1 */ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -118,7 +121,17 @@ const test5: ITest = {
   },
 }
 
-const list = [test1, test2, test3, test4_1, test4_2, test4_3, test4_4, test5]
+const list = [
+  test1,
+  test2,
+  test3,
+  test4_1,
+  test4_2,
+  test4_3,
+  test4_4,
+  test5_1,
+  test6,
+]
 
 list.forEach(test => {
   tests[test.key] = test
