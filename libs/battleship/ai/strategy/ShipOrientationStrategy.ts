@@ -6,11 +6,14 @@ import {AttackResult} from '../type/AttackResult'
 import {indexToLabel, labelToIndex} from '../../grid/grid_util'
 import {DIRECTION} from '../../grid/type/DIRECTION'
 
+type Coord = {row: number; col: number}
+
 export class ShipOrientationStrategy implements IStrategy {
   private _ai
-  private MOVE_MAP: Record<DIRECTION, {row: number; col: number}>
+  private MOVE_MAP: Record<DIRECTION, Coord>
   private directions: DIRECTION[]
   private directionIndex: number
+  private directionChecks: ((hit: Coord) => boolean)[]
 
   constructor(ai: BattleshipAI) {
     this._ai = ai
@@ -22,9 +25,22 @@ export class ShipOrientationStrategy implements IStrategy {
       DIRECTION.DOWN,
     ]
     this.directionIndex = 0
+    this.directionChecks = [
+      (hit: Coord) =>
+        this.directions[this.directionIndex] === DIRECTION.LEFT &&
+        hit.col === 0,
+      (hit: Coord) =>
+        this.directions[this.directionIndex] === DIRECTION.UP && hit.row === 0,
+      (hit: Coord) =>
+        this.directions[this.directionIndex] === DIRECTION.RIGHT &&
+        hit.col === 9,
+      (hit: Coord) =>
+        this.directions[this.directionIndex] === DIRECTION.DOWN &&
+        hit.row === 9,
+    ]
   }
 
-  private getMoveMap(): Record<DIRECTION, {row: number; col: number}> {
+  private getMoveMap(): Record<DIRECTION, Coord> {
     return {
       [DIRECTION.LEFT]: {row: 0, col: -1},
       [DIRECTION.UP]: {row: -1, col: 0},
@@ -68,26 +84,12 @@ export class ShipOrientationStrategy implements IStrategy {
     this.reset()
   }
 
-  private getNextMove(hit: {row: number; col: number}) {
+  private getNextMove(hit: Coord) {
     let next = {row: hit.row, col: hit.col}
-
-    const directionChecks = [
-      () =>
-        this.directions[this.directionIndex] === DIRECTION.LEFT &&
-        hit.col === 0,
-      () =>
-        this.directions[this.directionIndex] === DIRECTION.UP && hit.row === 0,
-      () =>
-        this.directions[this.directionIndex] === DIRECTION.RIGHT &&
-        hit.col === 9,
-      () =>
-        this.directions[this.directionIndex] === DIRECTION.DOWN &&
-        hit.row === 9,
-    ]
 
     let validMoveFound = false
     while (!validMoveFound) {
-      if (!directionChecks[this.directionIndex]()) {
+      if (!this.directionChecks[this.directionIndex](hit)) {
         validMoveFound = true
       } else {
         this.directionIndex = (this.directionIndex + 1) % this.directions.length

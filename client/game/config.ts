@@ -37,7 +37,7 @@ export function generateGrid(fleetType: FLEET_TYPE) {
   return grid
 }
 
-const mode: GAME_MODE = GAME_MODE.AI_TEST
+const mode: GAME_MODE = GAME_MODE.PLAYER_VS_AI
 
 export const player1Grid = generateGrid(
   (mode as GAME_MODE) === GAME_MODE.AI_TEST
