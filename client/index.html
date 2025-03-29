@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test TypeScript</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="message_box.css" />
   </head>
   <body>
     <div class="game-content">
@@ -25,6 +26,13 @@
         </div>
       </div>
     </div>
+    <div id="messageBoxOverlay" class="message-box-overlay">
+      <div id="messageBox" class="message-box">
+        <p>This is a message for the user!</p>
+        <button id="close-btn" class="close-btn">Close</button>
+      </div>
+    </div>
+    <button id="test-btn" class="test-btn">Show Message</button>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>

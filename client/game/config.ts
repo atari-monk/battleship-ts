@@ -19,6 +19,7 @@ import {
 } from '../../libs/battleship/events/events'
 import {State} from '../../libs/battleship/ai/type/State'
 import {IFleetPlacer} from '../../libs/battleship/grid/type/IFleetPlacer'
+import {setupGUI} from './gui'
 
 export function generateGrid(fleetType: FLEET_TYPE) {
   const grid = new BattleshipGrid()
@@ -82,3 +83,5 @@ eventEmitter.on(EVENT_STATE_CHANGED, newState => {
   console.log('State changed to', State[newState])
 })
 export const ai = new BattleshipAI(player1Grid, eventEmitter)
+
+setupGUI()
