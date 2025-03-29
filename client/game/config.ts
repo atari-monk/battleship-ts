@@ -13,10 +13,7 @@ import {GameConfig} from './type/GameConfig'
 import {PlayerConfig} from './type/PlayerConfig'
 import {test} from './tests'
 import {EventEmitter} from '@atari-monk/event-emitter'
-import {
-  EVENT_STATE_CHANGED,
-  StateEvents,
-} from '../../libs/battleship/events/events'
+import {EVENT_STATE_CHANGED, Events} from '../../libs/battleship/events/events'
 import {State} from '../../libs/battleship/ai/type/State'
 import {IFleetPlacer} from '../../libs/battleship/grid/type/IFleetPlacer'
 import {setupGUI} from './gui'
@@ -78,10 +75,12 @@ export const config: GameConfig = {
   ]),
 }
 
-const eventEmitter = new EventEmitter<StateEvents>()
+export const eventEmitter = new EventEmitter<Events>()
+
 eventEmitter.on(EVENT_STATE_CHANGED, newState => {
   console.log('State changed to', State[newState])
 })
+
 export const ai = new BattleshipAI(player1Grid, eventEmitter)
 
-setupGUI()
+setupGUI(eventEmitter)

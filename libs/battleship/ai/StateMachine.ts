@@ -5,16 +5,16 @@ import {RandomStrategy} from './strategy/RandomStrategy'
 import {ShipOrientationStrategy} from './strategy/ShipOrientationStrategy'
 import {SinkStrategy} from './strategy/SinkStrategy'
 import {EventEmitter} from '@atari-monk/event-emitter'
-import {EVENT_STATE_CHANGED, StateEvents} from '../events/events'
+import {EVENT_STATE_CHANGED, Events} from '../events/events'
 
 export class StateMachine {
   private state: State
   private randomStrategy: IStrategy
   private shipOrientationStrategy: IStrategy
   private sinkStrategy: IStrategy
-  private eventEmitter: EventEmitter<StateEvents>
+  private eventEmitter: EventEmitter<Events>
 
-  constructor(ai: BattleshipAI, eventEmitter: EventEmitter<StateEvents>) {
+  constructor(ai: BattleshipAI, eventEmitter: EventEmitter<Events>) {
     this.state = State.Idle
     this.randomStrategy = new RandomStrategy(ai)
     this.shipOrientationStrategy = new ShipOrientationStrategy(ai)

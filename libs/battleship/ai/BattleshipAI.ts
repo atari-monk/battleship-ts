@@ -4,7 +4,7 @@ import {ShipTarget} from './type/ShipTarget'
 import {ShipTracker} from './ShipTracker'
 import {StateMachine} from './StateMachine'
 import {EventEmitter} from '@atari-monk/event-emitter'
-import {StateEvents} from '../events/events'
+import {Events} from '../events/events'
 
 export class BattleshipAI {
   public enemyGrid: BattleshipGrid
@@ -12,10 +12,7 @@ export class BattleshipAI {
   private stateMachine: StateMachine
   private shipTracker: ShipTracker
 
-  constructor(
-    enemyGrid: BattleshipGrid,
-    eventEmitter: EventEmitter<StateEvents>
-  ) {
+  constructor(enemyGrid: BattleshipGrid, eventEmitter: EventEmitter<Events>) {
     this.enemyGrid = enemyGrid
     this.shipTracker = new ShipTracker()
     this.shotsTaken = new Set()
